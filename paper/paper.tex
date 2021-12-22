@@ -1,0 +1,1919 @@
+%% Template for the submission to:
+%%   Statistical Science [STS]
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% In this template, the places where you   %%
+%% need to fill in your information are     %%
+%% indicated by '???'.                      %%
+%%                                          %%
+%% Please do not use \input{...} to include %%
+%% other tex files. Submit your LaTeX       %%
+%% manuscript as one .tex document.         %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[sts]{imsart}
+
+%% Packages
+\RequirePackage{amsthm,amsmath,amsfonts,amssymb}
+\RequirePackage[authoryear]{natbib}
+\RequirePackage[colorlinks,citecolor=blue,urlcolor=blue]{hyperref}
+\RequirePackage{graphicx}
+\RequirePackage{enumitem}
+\usepackage[ruled,linesnumbered]{algorithm2e}
+\SetKwInput{KwInput}{Input} % Set the Input
+\SetKwInput{KwOutput}{Output} % set the Output
+\SetKwInput{KwNotation}{Notation}
+\RequirePackage{microtype} % Ryan added this
+
+\startlocaldefs
+\def\R{\mathbb{R}}
+\def\C{\mathbb{C}}
+\def\E{\mathbb{E}}
+\def\P{\mathbb{P}}
+\def\T{\mathsf{T}}
+\def\Cov{\mathrm{Cov}}
+\def\Var{\mathrm{Var}}
+\def\half{\frac{1}{2}}
+\def\tr{\mathrm{tr}}
+\def\df{\mathrm{df}}
+\def\dim{\mathrm{dim}}
+\def\col{\mathrm{col}}
+\def\row{\mathrm{row}}
+\def\nul{\mathrm{null}}
+\def\rank{\mathrm{rank}}
+\def\nuli{\mathrm{nullity}}
+\def\spa{\mathrm{span}}
+\def\sign{\mathrm{sign}}
+\def\supp{\mathrm{supp}}
+\def\diag{\mathrm{diag}}
+\def\aff{\mathrm{aff}}
+\def\conv{\mathrm{conv}}
+\def\dom{\mathrm{dom}}
+\def\hy{\hat{y}}
+\def\hf{\hat{f}}
+\def\hmu{\hat{\mu}}
+\def\halpha{\hat{\alpha}}
+\def\hbeta{\hat{\beta}}
+\def\htheta{\hat{\theta}}
+\def\cA{\mathcal{A}}
+\def\cB{\mathcal{B}}
+\def\cD{\mathcal{D}}
+\def\cE{\mathcal{E}}
+\def\cF{\mathcal{F}}
+\def\cG{\mathcal{G}}
+\def\cK{\mathcal{K}}
+\def\cH{\mathcal{H}}
+\def\cI{\mathcal{I}}
+\def\cL{\mathcal{L}}
+\def\cM{\mathcal{M}}
+\def\cN{\mathcal{N}}
+\def\cP{\mathcal{P}}
+\def\cS{\mathcal{S}}
+\def\cT{\mathcal{T}}
+\def\cW{\mathcal{W}}
+\def\cX{\mathcal{X}}
+\def\cY{\mathcal{Y}}
+\def\cZ{\mathcal{Z}}
+\newcommand{\argmin}{\mathop{\mathrm{argmin}}}
+\newcommand{\argmax}{\mathop{\mathrm{argmax}}}
+\newcommand{\minimize}{\mathop{\mathrm{minimize}}}
+\newcommand{\subjectto}{\mathop{\mathrm{subject\,\,to}}}
+\def\hx{\hat{x}}
+\def\hp{\hat{p}}
+\def\hF{\hat{F}}
+\def\hS{\hat{S}}
+\def\bx{\bar{x}}
+\def\bp{\bar{p}}
+\def\bF{\bar{F}}
+\def\bS{\bar{S}}
+\def\hP{\hat{P}}
+\def\tP{\tilde{P}}
+\def\tD{\tilde{D}}
+\def\D{\mathcal{D}}
+\def\I{\mathcal{I}}
+\def\T{\mathcal{T}}
+\def\th{^\mathrm{th}}
+\def\st{^\mathrm{st}}
+\def\rd{^\mathrm{rd}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                          %%
+%% Uncomment next line to change            %%
+%% the type of equation numbering           %%
+%%                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\numberwithin{equation}{section}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                          %%
+%% For Axiom, Claim, Corollary, Hypothesis, %%
+%% Lemma, Theorem, Proposition              %%
+%% use \theoremstyle{plain}                 %%
+%%                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\newtheorem{proposition}{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                          %%
+%% For Assumption, Definition, Example,     %%
+%% Notation, Property, Remark, Fact         %%
+%% use \theoremstyle{remark}                %%
+%%                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\newtheorem{assumption}{Assumption}
+\endlocaldefs
+
+\begin{document}
+\begin{frontmatter}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                          %%
+%% Enter the title of your article here     %%
+%%                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Real-Time Estimation of COVID-19 Infections via Deconvolution and Sensor
+  Fusion} 
+\runtitle{Real-Time Estimation of COVID-19 Infections}
+
+\begin{aug}
+\author[A]{\fnms{Maria} \snm{Jahja}\ead[label=e1]{maria@stat.cmu.edu}},
+\author[B]{\fnms{Andrew} \snm{Chin}\ead[label=e2]{achin23@jhu.edu}},
+\and
+\author[C]{\fnms{Ryan J.} \snm{Tibshirani}\ead[label=e3]{ryantibs@cmu.edu}}
+\address[A]{Maria Jahja is Ph.D. Candidate, 
+  Department of Statistics \& Data Science, 
+  Machine Learning Department,  
+  Carnegie Mellon University, 
+  Pittsburgh, PA \printead{e1}.} 
+\address[B]{Andrew Chin is Statistical Developer, 
+  Machine Learning Department,
+  Carnegie Mellon University, 
+  Pittsburgh, PA \printead{e2}.} 
+\address[C]{Ryan J. Tibshirani is Professor, 
+  Department of Statistics \& Data Science, 
+  Machine Learning Department, Carnegie Mellon University,
+  Pittsburgh, PA \printead{e3}.} 
+\end{aug}
+
+\begin{abstract}
+We propose, implement, and evaluate a method to estimate the daily number of new
+symptomatic COVID-19 infections, at the level of individual U.S.\ counties, by
+deconvolving daily reported COVID-19 case counts using an estimated
+symptom-onset-to-case-report delay distribution. Importantly, we focus on
+estimating infections in real-time (rather than retrospectively), which poses
+numerous challenges. To address these, we develop new methodology for both the 
+distribution estimation and deconvolution steps, and we employ a sensor fusion 
+layer (which fuses together predictions from models that are trained to track
+infections based on auxiliary surveillance streams) in order to improve accuracy
+and stability. 
+\end{abstract}
+
+\begin{keyword}
+\kwd{COVID-19}
+\kwd{nowcasting}
+\kwd{deconvolution}
+\kwd{sensor fusion}
+\end{keyword}
+
+\end{frontmatter}
+
+\section{Introduction}
+\label{sec:intro}
+
+Accurate, real-time estimates of incident infections play a critical role in
+informing the public health response to the spread of a disease through a
+population. However, official metrics on disease activity published by
+traditional public health surveillance systems in the United States do not in
+fact reflect activity in real-time, as they suffer from some degree of latency
+due to the way their reporting pipelines are set up and implemented.
+
+With addressing the latency in traditional public health reporting a part of the
+motivation, the last decade has seen a rise in the development of \emph{digital
+  surveillance} streams in public health. Search and social media trends have
+constituted much of the focus \citep[e.g.,][]{Brownstein:2009, Ginsberg:2009,
+Salathe:2012, Kass-Hout:2013, Paul:2017}. More broadly, \emph{auxiliary
+surveillance} streams that operate outside of traditional public health
+surveillance, like online surveys, medical device logs, or electronic medical 
+records, have also received significant attention
+\citep[e.g.,][]{Kass-Hout:2011, Carlson:2013, Viboud:2014, Smolinski:2015,
+Santillana:2016, Charu:2017, Yang:2019, Ackley:2020, Leuba:2020, Radin:2020}.
+
+Auxiliary surveillance can improve not only on the timeliness but also on the  
+accuracy and robustness of traditional public health reporting. 
+Auxiliary data streams have therefore become an integral part of modern systems for
+disease \emph{nowcasting} \citep[e.g.,][]{McIver:2014, Santillana:2015,
+  Yang:2015, Farrow:2016, Jahja:2019, Brooks:2020}, which, put broadly, are used
+to estimate the contemporaneous value of a signal that will only be fully
+observed at a later date, using partial or noisy data.    
+
+\subsection{Surveillance During the Pandemic}
+
+During the COVID-19 pandemic, public health surveillance has produced, on one
+hand, some of the most detailed public health data that the U.S.\ has ever seen,
+such as daily, county-level data on reported COVID-19 cases and deaths. It has
+also, on the other hand, painted an imperfect picture of situational awareness,
+which created a number of downstream challenges for the public health 
+response. See, e.g., \citet{Rosenfeld:2021} and references therein for an
+overview of the issues. In this paper, we identify a few issues surrounding
+COVID-19 case reporting in particular, propose methodology to address 
+them, and implement and evaluate this proposal over eight months of pandemic
+data.   
+
+To give some background, in the early days of the pandemic, a handful of
+non-gonvermental groups such as JHU CSSE \citep{Dong:2020} (and also the COVID
+Tracking Project, the New York Times, and USAFacts) became known as the most 
+trustworthy sources for aggregate public health reporting data on COVID-19 in
+the U.S. They were founded around the idea of scraping COVID-19 data published
+daily on dashboards that are run by local public health authorities (such as
+state and county departments of public health), which, at the time, provided
+more accurate and timely data than federal health authorities (probably due to
+unrecoverable failures at one or more points along the reporting pipeline). In
+fact, not only in the early days of the pandemic, but throughout, the data
+published by these groups has been invaluable for decision-makers, modelers,
+data journalists, and the general public; for example, in the U.S.\ COVID-19
+Forecast Hub \citep{ForecastHub}, an open, community-driven repository of
+forecasts that serves as the official source for forecasting communications by
+the U.S.\ CDC, data from JHU CSSE remains the gold standard for COVID-19 case
+and death forecast evaluation.
+
+Turning our focus now to case reporting, JHU scrapes cumulative case numbers
+that are published daily on local health authority dashboards, and subsequently
+derives a notion of case incidence based on day-to-day differences in cumulative
+counts. Note that, by construction, this definition of incidence reflects the
+number of new COVID-19 cases that are \emph{reported} (to the public) on any
+given day. Of course, this is not the same as the number of new cases 
+by date tested, specimen collection date, or symptom onset date. Any of the
+latter options would be more informative (increasingly so) as a definition of 
+incidence; but the reality is that aligning by report date is the only
+immediately available option, given the data that is published broadly on local
+health authority dashboards, and hence collected and aggregated by data
+scrapers. JHU publishes the number of new COVID-19 case reports per U.S.\
+county, daily, at a 1-day lag. However, since report dates can lag behind
+symptom onset dates by many days (a typical lag is around 5-10, but lags can be
+up to 30 days or more; see Figure~\ref{fig:line_list_time}), this really gives
+us a glimpse into COVID activity in the recent past, rather than the present.
+
+Importantly, the CDC publishes a de-identified patient-level data set (``line
+list'') on COVID-19 infections \citep{cdc_public}, which provides a symptom 
+onset date column. In principle, this should allow us to construct a notion of
+case incidence that is aligned by symptom onset date, but this is not possible
+in practice, due to two barriers. First, the CDC only publishes updates to the 
+line list monthly (due to the complexity of managing this data set). Second, 
+and more problematically, this line list is fraught with missingness,
+extending well beyond missingness in the symptom onset column: the \emph{total}
+number of COVID-19 cases according to this line list (whether the symptom onset
+date is observed or not) is far less than the total number of cases from JHU
+(e.g., in early September 2021, the CDC line list reports about 30 million total
+versus about 40 million from JHU), and some states (such as Texas) appear to 
+missing nearly all of their cases in the line list altogether (see
+Figure~\ref{fig:line_list_state}). 
+
+\subsection{Nowcasting by Deconvolution}
+
+In what follows in this paper, we use the CDC line list to estimate a delay
+distribution between symptom onset and report dates, and then use this delay  
+distribution to deconvolve daily numbers of new case reports published by JHU to
+estimate daily numbers of new symptomatic infections. Furthermore, we train
+models that track historical trends between past infection estimates and
+auxiliary signals---based on COVID-related outpatient visits, self-reported
+symptoms from online surveys, and Google searches related to COVID
+symptoms---and fuse together predictions from these models to improve
+the accuracy and robustness of our estimates of new infections for the most
+recent 10 days (where deconvolution is particularly challenging). An
+illustration is given in Figure~\ref{fig:deconv_demo}. 
+
+\begin{figure*}[tb]
+\centering
+\includegraphics[width=0.95\linewidth]{./figures/nowcast_demo.pdf}
+\caption{Illustration of estimating latent infections from reported cases. The 
+  dashed red line displays infection rates estimated ``naively'' in real-time,
+  by directly deconvolving case data up through early February 2021, while
+  the solid black line display infection rates estimated using finalized data
+  from roughly four months afterwards. The blue region on the
+  right-hand side highlights a period in which the real-time estimate deviates 
+  substantially from the finalized one, due to the fact that we are lacking 
+  sufficient (future) case observations needed to perform a ``full''
+  deconvolution. The green triangles represent real-time nowcasts made by sensor
+  fusion, which reduces the volatility of the real-time estimate and tracks the
+  finalized estimate nicely. Lastly, the (scaled) reporting delay distribution
+  estimated at the midpoint of November 2020 is drawn in purple, with the median
+  reporting delay (8 days) marked as a dotted gray line.} 
+\label{fig:deconv_demo}
+\end{figure*}
+
+We focus on estimating new infections in \emph{real-time}, laying out a
+framework for an operational nowcasting system that is forced to cope with all
+of the challenges of disease tracking using provisional data. At any given
+nowcast date $t$, to estimate the number of symptomatic infections at day $t-k$
+(for small values of $k$, such as $k=1,2,\ldots$), we make sure to use data that
+would have actually been available at $t$. This not only affects the way we
+carry out all of our experiments (model training and evaluation), it also leads
+us to develop some new interesting methodology to deal with the issue of
+\emph{right truncation} (highlighted in Figure~\ref{fig:deconv_demo} by the blue
+region). For example, in order to estimate the delay distribution in real-time,
+we develop a Kaplan-Meier-like procedure to deal with a kind of right censoring
+that occurs in the line list. We also develop specialized regularization techniques
+to control the volatility of estimates around the nowcast date in an
+optimization problem that we solve for real-time deconvolution.    
+
+An outline for this paper is as follows. In Section~\ref{sec:preliminaries}, we
+cover various preliminary details about the problem setup. Retrospective
+construction of the delay distribution and deconvolution are described in
+Section~\ref{sec:deconv_retro}, whereas real-time estimation is the focus in
+Section~\ref{sec:deconv_realtime}. Sensor fusion is covered in
+Section~\ref{sec:leverage_aux}, and extensive evaluations---comparing nowcasts
+made in real-time to those made retrospectively (using ``finalized'' data that
+would have only been available much later), are performed in
+Section~\ref{sec:evaluation}. In Section~\ref{sec:discussion}, we conclude with
+a discussion and describe a few directions for future work.
+
+\subsection{Related Work}
+\label{sec:related_work}
+
+In the computational epidemiology literature, the term ``nowcasting'' has been
+applied to a variety of related but distinct estimation problems. Broadly
+speaking, what these problems have in common is that they are about real-time
+estimation of some quantity, based on partial or noisy data. They differ in
+\emph{what} is being estimated, and whether this quantity will
+eventually be fully observed (after enough time has passed) or whether it is 
+latent. Examples in the former non-latent setting include \citet{Yang:2015,
+  Farrow:2016, Jahja:2019, Brooks:2020, McGough:2020, Hawryluk:2021}. The
+nowcast targets here are influenza-like illness cases, dengue cases, or
+COVID-19 deaths, which, due to reporting delays and data revisions, are only 
+available in provisional form in real-time. 
+
+The latent setting exhibits another degree of diversity within itself. In our
+work, we target symptomatic COVID-19 infections, which, to be perfectly clear,
+is a latent data stream. Another example along similar lines is
+\citet{Goldstein:2009}, who estimate influenza infection incidence via Bayesian
+deconvolution of mortality data. Meanwhile, other authors might view inferring 
+latent infections as just a stepping stone toward ultimately estimating the 
+effective reproductive number $R_t$, a key epidemic parameter. Central
+contributions to the methodology on $R_t$ nowcasting include:
+\citet{Wallinga:2004}, who develop a simple model that uses case counts and an 
+estimate of the serial interval; \citet{Bettencourt:2008}, who derive a local
+approximation to the SIR model; and \citet{Cori:2013, Thompson:2019}, who build 
+on the renewal equation using Bayesian modeling. For a nice review of these
+approaches, see \citet{Gostic:2020}. 
+
+The aforementioned methods have been applied and extended to build systems for
+real-time $R_t$ nowcasting during the COVID-19 pandemic by \citet{Abbott:2020,
+  rtlive, Chitwood:2021}. A key difference between these approaches and ours is 
+that they infer infections through forward-filling: loosely speaking, they
+convolve forward a candidate estimate of infections, obtain feedback by
+comparing the result to measured cases, and iterate to refine estimates. This
+can be effective given accurate prior knowledge, but of course it can be hard to
+judge the accuracy of prior knowledge in practice. We take a more flexible,
+non-model-based approach and estimate infections by direct deconvolution. We
+also focus on fusing in auxiliary sources of information to improve real-time
+accuracy and robustness. We remark that nowcasts of $R_t$ could be inferred as a
+by-product of our infection nowcasts (based on a local approximation to the SIR
+model), which we describe in the discussion.
+
+Finally, deconvolution has been extensively studied for many years in many
+fields, notably signal and image processing, where deconvolution is sometimes
+called deblurring. As an inverse problem, deconvolution is ill-posed in
+settings in which the convolution operator is not known exactly or observations are
+made with noise \citep{Oppenheim:2017}. Longstanding approaches to overcome
+mis-specification here traditionally involve regularization, 
+classically, Wiener deconvolution \citep{Wiener:1964}, which stabilizes the
+inversion using an estimated signal-to-noise ratio. Alternative approaches use
+familiar regularization techniques like $\ell_1$ and $\ell_2$ penalities
+\citep{Taylor:1979, Debeye:1990}. Most related to our work is deconvolution
+using total variation regularization, first proposed by \citet{Rudin:1994},
+which has since become a central tool in signal and image processing. 
+
+\section{Preliminaries}
+\label{sec:preliminaries}
+
+In the remainder of this paper, we develop a framework for estimating the daily
+symptomatic COVID-19 infection rate (where by ``rate'' we mean a count per
+100,000 people, the standard units in epidemiology), concentrating on infections
+that will eventually result in a reported COVID-19 case. To be clear on
+nomenclature: for convenience, we will often abbreviate ``symptomatic
+infection'' by ``infection'' (and so, terms like ``infection onset'' and
+``infection rate'' should be implicitly interpreted as symptomatic). To
+estimate infection rates, we deconvolve reported case rates with an estimated
+symptom-onset-to-case-report delay distribution. To reiterate, we use case data
+from JHU CSSE \citep{Dong:2020}, and to infer the delay distribution, we use a
+de-identified line list on patient-level infections from the CDC
+\citep{cdc_public}. 
+
+\smallskip
+\paragraph*{Auxiliary Indicators.}
+
+After deconvolution, we improve our infection rate estimates by incorporating a
+number of contemporaneous signals that track COVID activity---we will also 
+refer to these as \emph{indicators}---which are publicly available through
+Delphi's COVIDcast API \citep{Reinhart:2021}. The five indicators that we
+consider, described below, provide auxiliary information on COVID-19 outside of 
+traditional public heath reporting. Here and throughout, we abbreviate
+COVID-like illness by CLI. 
+
+\begin{enumerate}
+\item Change Healthcare COVID (CHNG-COVID): The percentage of outpatient
+  visits that have confirmed COVID-19 diagnostic codes, based on de-identified 
+  Change Healthcare medical claims data. 
+\item Change Healthcare CLI (CHNG-CLI): The percentage of outpatient visits that
+  have COVID-like diagnostic codes, based on the same data.
+\item Doctor Visits CLI (DV-CLI): The same definition as CHNG-CLI, but applied
+  to de-identified medical claims data from other health systems partners. 
+\item COVID Trends and Impact Survey CLI in the community
+  (CTIS-CLIIC): The estimated percentage of people reporting  
+  illness in their household or local community, based on Delphi's COVID
+  Trends and Impact Survey (CTIS), in partnership with Facebook. 
+\item Google searches for anosmia and ageusia (Google-AA): A measure of volume
+  for Google queries related to anosmia or ageusia (loss of smell or taste),
+  from Google's COVID-19 Search Trends data set. 
+\end{enumerate}
+
+Roughly speaking, we study these particular indicators (ordered roughly from
+``late'' to  ``early'') because conceptually they reflect data measurements
+that would be made at some period of time in between infection onset and case
+report to a public health authority, and therefore would be relevant in
+inferring latent infection rates. More information on these indicators and
+their underlying data sources is given in \citet{Reinhart:2021}. For more
+information on CTIS in particular, we refer to \citet{Salomon:2021}. For a
+study of how these and similar indicators can contribute to COVID-19 forecasting
+models, we refer to \citet{McDonald:2021}. 
+
+\smallskip
+\paragraph*{Sensor Fusion.}  
+
+For each of the auxiliary indicators described above, we train a model to
+estimate latent infection rates from indicator values, using historical data
+(described in Section~\ref{sec:sensor_models}). At each nowcast date, we then  
+use such a model to estimate the latent infection rate from the current
+indicator value, which gives a total of five estimates (one from each of the
+five models), along with a sixth estimate coming from an autoregressive model 
+trained on historical estimated infection rates. We will refer these six 
+contemporaneous estimates as \emph{sensors}.
+
+In this paper, we consider (as described in Section~\ref{sec:sensor_fusion})
+various methods for combining these estimates into single estimate of the 
+infection rate, which we will call \emph{sensor fusion} methods. Broadly
+speaking, sensor fusion is a form of ensembling, which is used extensively 
+in predictive modeling in statistics and machine learning, as it can often help
+improve both accuracy and robustness. In our particular application, the sensors
+themselves are constructed from data streams operating outside of traditional 
+public health reporting, which itself contributes an important angle in terms of
+robustness in the estimation of latent infection rates (as these are tied to  
+public health reports via a convolutional model). 
+
+\subsection{Problem Setup}
+\label{sec:problem_setup}
+
+\paragraph*{Estimation Period.}
+
+For every day $t$ in between October 1, 2020 and June 1, 2021 inclusive (243
+days in total), we estimate the symptomatic infection rate at day $t-k$, using  
+only data that would have been as of time $t$, which in this context we call the  
+\emph{nowcast date}. Estimation of the latent infection rate at time $t-k$ (for
+positive $k$) is technically a backcast, though we will not be careful to
+distinguish this notationally from nowcasting, and will generally refer to this
+as nowcasting at lag $k$. We produce estimates for each $k=1,\ldots,10$, a total  
+of 10 targets per nowcast date $t$. 
+
+When we say above that nowcasts are made using data that would have been
+available \emph{as of} a given nowcast date $t$, we mean that we adhere not to
+only the real-time availability (latency) of signals at $t$, but also the 
+\emph{version} of the data published at $t$---simply put, imagine that we
+``rewind'' the clock to time $t$ and query the API to receive the data that
+would have been returned then. This is possible becausse the COVIDcast API
+records and provides access to all historical versions of data, as described in 
+\citet{Reinhart:2021}. As epidemic data is often subject to revision, if we
+train and evaluate models on ``finalized'' data (that would have been available
+only at a much later time point) then this can lead to overly optimistic
+(inaccurate) conclusions about real-time model performance; see, e.g.,
+\citet{McDonald:2021}. 
+
+Further, it is worth noting that reported case data from JHU is available at a
+1-day lag, and we assume that there is at least another 1-day lag between
+symptom onset and case report (explained in
+Section~\ref{sec:delay_distribution}). Hence through real-time deconvolution
+alone we would be able to make nowcasts at a 2-day lag at the earliest. Making
+nowcasts at a 1-day lag is enabled by sensor fusion, using auxiliary signals
+with 1-day latency (explained in Section~\ref{sec:leverage_aux}). In this sense,
+sensor fusion is able improve not only nowcasting accuracy, but also latency,
+and buys us 1 extra day.
+
+\smallskip
+\paragraph*{Geographic Scope.}
+
+We produce nowcasts at the county resolution, but for computational purposes, we
+restrict our attention to the the 200 U.S.\ counties with the highest population
+(according to the 2019 Census). We additionally produce estimates for each 
+of
+the 50 U.S.\ states.
+
+Some of the methodology that we use for sensor fusion---in particular, the
+Kalman-filter-inspired method in \citet{Farrow:2016}---requires a
+geographical hierarchy, thus using the remaining $\approx$ 2500 U.S.\ counties
+we aggregate these within each state to create ``rest-of-state'' jurisdictions,  
+and make estimates for these as well, for the purposes or maintaining such a
+hierachy. 
+
+\smallskip
+\paragraph*{Evaluation.}
+
+We evaluate all nowcasts made in between October 1, 2020 and June 1, 2021
+inclusive (243 days in total) and at each of the 250 locations in consideration 
+(50 states and the 200 largest counties) against latent infection rate estimates 
+obtained by deconvolving the case rate data available as of August 30, 2021. 
+We will refer to the latter as \emph{finalized} infection rate estimates (as 
+opposed to real-time ones); details are given in Section~\ref{sec:ground_truth}. 
+
+\subsection{Confounding}
+\label{sec:confounding}
+
+Estimates of COVID infections obtained by deconvolving reported cases will
+generally underestimate the true number of infections, because many infections
+are undetected or untested, and as such, do not appear later on in case
+reports. If we wanted to estimate the true number of symptomatic infections
+from case reports, then we would need to have some sense of the fraction of 
+symptomatic infections that go untested. Of course, this only gets more
+complicated if we extend our consideration to both symptomatic and asymptomatic
+infections.  
+
+Other authors, e.g., \citet{Chitwood:2021}, have taken the ambitious step of
+proposing and implementing frameworks with parameters that account for such
+confounding. However, adjustments for case ascertainment and asymptomatic
+infections generally rely, at least to some nontrivial extent, on model
+assumptions (typically, mechanistic ones) that are difficult to substantiate.
+
+We take a different perspective and pose the problem as one of real-time 
+deconvolution only. We seek to answer the question:   
+\begin{quote}
+\it
+Can we estimate---in real-time---the number of new symptomatic COVID-19
+infections that will eventually appear in case reports?  
+\end{quote}
+Hence, by construction, confounding is not a problem that we even attempt   
+to reconcile (because the target we track, infections that eventually show up
+in case reports, simply inherits any confounding that would be present in the
+case reporting stream in the first place). 
+
+Our approach can be seen as one that runs in parallel (rather than in
+contradiction) to an approach that explicitly models and removes the effects of
+confounding in case reporting. We focus on addressing the deconvolution problem
+as carefully as possible, with a concern for real-time estimation, and an eye
+toward using auxiliary signals to improve accuracy and robustness. Estimates of
+parameters that account for confounding (that comes from other work focused on  
+these aspects) could certainly be applied to our deconvolution estimates post
+hoc in order to adjust them appropriately; we revisit this idea in the
+discussion. 
+
+Lastly, under an assumption that the confounding acts as a multiplicative bias
+that changes slowly over time, our real-time infection rate
+estimates---themselves subject to confounding by construction, as explained
+above---can be post-processed to derive real-time \emph{approximately
+unconfounded} estimates of $R_t$, which is the average of number of secondary
+infections generated by a COVID-19 infection at time $t$. This is also described
+in the discussion. 
+
+\section{Retrospective Deconvolution}
+\label{sec:deconv_retro}
+
+In this section, we study and fit a convolutional model between infections and  
+reported cases. We adopt a \emph{retrospective} angle here and do not concern
+ourselves with data availability or versioning issues; this is covered in the
+next section.   
+
+\subsection{Convolutional Model}
+\label{sec:conv_model}
+
+For simplicity, we introduce the convolutional model in just a single
+location. We denote by $y_t$ the number of new cases that are reported at time
+$t$, and by $x_t$ the number of new infections that have onset at time $t$. Our
+jumping-off point is the following model:
+\begin{equation}
+\label{eq:conv_model1}
+\E[y_t \,|\, x_s, s \leq t] = \sum_{s=1}^t \pi_t(s) \, x_s, 
+\end{equation}
+where for each $s \leq t$,
+\begin{equation}
+\label{eq:delay_prob1}
+\pi_t(s) = \P\big( \text{case report at $t$} \,|\, \text{infection onset at   
+  $s$} \big). 
+\end{equation}
+We refer to the probabilities above as \emph{delay probabilities} at time $t$,
+and the entire sequence $(\pi_t(s) : s \leq t)$, as the \emph{delay
+  distribution} at time $t$. 
+
+The justification for \eqref{eq:conv_model1}, \eqref{eq:delay_prob1} is
+elementary: to count $y_t$, we enumerate all infections that ever occurred in
+the past:  
+\[
+y_t = \sum_{s=1}^t \sum_{i=1}^{x_s} 1\{\text{the $i\th$ \hspace{-3pt} infection   
+  at $s$ gets reported at $t$}\}.
+\]
+Taking a conditional expectation on both sides above, and using linearity,
+delivers \eqref{eq:conv_model1}, \eqref{eq:delay_prob1}.
+
+In the next subsections, we will describe how to estimate the probabilities
+$\pi_t(s)$ in \eqref{eq:delay_prob1}, and how to use this alongside the observed
+case reports $y_t$ in order to estimate the latent infections in
+\eqref{eq:conv_model1}. 
+
+\subsection{Estimating the Delay Distribution} 
+\label{sec:delay_distribution}
+
+At the outset, we place the following assumptions on the delay distribution in 
+order to make its estimation (using the CDC line list data, to be described
+shortly) more tractable.   
+
+\begin{assumption}
+\label{asm:delay_support} 
+Infections are always reported within $d=45$ days; that is, $\pi_t(s) = 0$
+whenever $s < t-d$. 
+\end{assumption}
+
+\begin{assumption}
+\label{asm:zero_at_zero}
+The probability of zero delay is zero; that is, $\pi_t(t) = 0$.
+\end{assumption}
+
+\begin{assumption}
+\label{asm:geo_invar}
+The delay distribution is geographically invariant (it is the same for any
+location). 
+\end{assumption}
+
+Assumption~\ref{asm:delay_support} is innocuous. The vast majority of pairs of
+recorded infection dates and report dates in the CDC line list data fall within
+$d=45$ days of one another. Assumption~\ref{asm:zero_at_zero} is perhaps less
+innocuous but still fairly minor, and it is a consequence of the fact that a
+delay of zero (infection date equal to report date) has been used inconsistently
+in the CDC line list: this could mean a true delay of zero, or it could be a
+code for missingness.
+
+Assumption~\ref{asm:geo_invar} is the most noteworthy and troublesome. We do
+\emph{not} believe it to be true that different locations actually have
+identical patterns of delay between infections and case reports; conversely, we 
+expect there to be a considerable amount of variability between locations in
+this regard. While we do allow the delay distribution to change over time (see
+Figure~\ref{fig:line_list_time} for evidence for the importance of this), we 
+consider Assumption~\ref{asm:geo_invar} to be a weakness of our work. However,
+the \emph{data is simply not there} in the CDC line list to warrant estimation
+of location-specific delay distributions (see Figure~\ref{fig:line_list_state}), 
+thus we resort to estimating a nation-wide delay distribution.
+
+Meanwhile, it is worth pointing out that better (location-specific) estimates of
+the delay distribution could be simply plugged into our deconvolution
+methodology (detailed in Section~\ref{sec:ground_truth}) to yield better
+estimates of latent infections. This would carry over to all of the real-time  
+methodology for deconvolution and sensor fusion (in
+Section~\ref{sec:deconv_realtime}) as well. In other words, a strength of our
+methodology is that it can treat the delay distribution as an input, and a user
+(say, a local health official) can replace the default nation-wide delay
+distribution with a more-informed local one in order to get more-informed local 
+estimates. 
+
+In light of Assumptions~\ref{asm:delay_support} and \ref{asm:zero_at_zero}, we
+change our notation henceforth, and rewrite \eqref{eq:conv_model1},
+\eqref{eq:delay_prob1} as: 
+\begin{equation}
+\label{eq:conv_model2}
+\E[y_t \,|\, x_s, s \leq t] = \sum_{k=1}^d p_t(k) \, x_{t-k},  
+\end{equation}
+where for $k=1,\ldots,d$,
+\begin{equation}
+\label{eq:delay_prob2}
+p_t(k) = \P\big( \text{case report at $t$} \,|\, \text{onset at $t-k$} \big). 
+\end{equation}
+
+\smallskip
+\paragraph*{CDC Line List.}
+
+The CDC provides de-identified patient-level surveillance data on COVID-19 in
+both public and restricted forms \citep{cdc_public, cdc_restricted}. The
+restricted one is made available under a data use agreement. The public line
+list contains the same patient-level records as the restricted one, but it has
+geographic details withheld. (There is another publicly available that contains
+geographic details, but withholds temporal details). We use the public data
+set\footnote{The CDC does not take responsibility for the scientific validity or
+  accuracy of methodology, results, statistical analyses, or conclusions
+  presented.} 
+in this paper for estimating the delay distribution, since missingness compels
+us to make nation-wide (rather than location-specific) estimates.
+
+It is worth noting that the line list is itself provisional and subject to
+revision. Furthermore, the CDC only publishes updates to the line list
+monthly. In this paper, for simplicity, we use a single version of the CDC line
+list---released on September 9, 2021---to construct all delay
+distributions. Nonetheless, in our real-time nowcasting experiments, we 
+restrict our access to data in this line list that would have been available at
+each nowcast date $t$ (rows whose report date to the CDC is at most $t$) to
+construct delay distribution estimates at $t$. This is highly nontrivial, due to
+bias induced by truncation of data after $t$ (see
+Section~\ref{sec:delay_adjust}). 
+
+\smallskip
+\paragraph*{Missing Values.}
+
+The CDC line list (both public and restricted data sets) is subject to a high
+degree of missingness. Such missingness manifests itself in a variety of
+ways. For the public line list published on September 9, 2021: 
+\begin{itemize}
+\item it has 29,851,450 rows, compared to 39,365,080 cumulative cases reported  
+  by JHU CSSE on September 9, 2021;
+\item 8.64\% of rows are missing the case report date (the
+  \texttt{cdc\_report\_dt} column);    
+\item 53.6\% of rows are missing the symptom onset date (the \texttt{onset\_dt}
+  column);   
+\item of all rows in which symptom onset date is present, the case report date
+  is also present, but when a report date is missing in practice it sometimes 
+  gets filled in with the onset date, clouding the interpretation of a zero 
+  delay.\footnote{Confirmed by personal communication with the CDC.}     
+\end{itemize}
+Due to the last point, we exclude zero in the construction of all delay
+distribution estimates, in what follows. 
+
+\begin{figure*}[tb]
+\centering
+\includegraphics[width=0.95\linewidth]{./figures/combined_linelist_plots_20210601.pdf}
+\caption{Top: cumulative case count per state on June 1, 2021, as reported by
+  JHU CSSE, compared to the complete case count (where both onset date and
+  report date are observed) per state up through the same date, in the CDC
+  restricted line list. Most states have less than 50\% of the cases appear in
+  complete form in the line list, and some (e.g., Texas) have almost none at
+  all. Bottom: proportion of complete cases with zero delay per state in the
+  same line list data. There is very wide variation between these proportions.} 
+\label{fig:line_list_state}
+\end{figure*}
+
+The restricted line list is no better with respect to such missingness, 
+exhibiting nearly exactly the same patterns as those described above. It
+does additionally provide geographic details, which allows us to examine how  
+missingness is dispersed across different
+locations. Figure~\ref{fig:line_list_state} displays results to this end, using 
+the restricted line list released on October 12, 2021. The top panel shows that
+there is a high degree of missingness in complete case counts (those with
+both onset date and report date observed) in most states, often well over 50\%,
+and moreover, missingness is far from uniform at random: e.g., Texas has barely
+any of its cases present in the line list. The latter observation is why we
+resort to estimating nation-wide delay distributions, in what follows. 
+
+The bottom panel in the figure shows that there is also a high degree of
+heterogeneity in the fraction of complete cases with zero delay (between onset
+date and report date) across states. Some states (e.g., California) have zero
+delays for nearly all of their complete cases, while others (e.g., Delaware)
+have zero delays for none of their complete cases, suggesting that the practice
+of setting a missing report date equal to the associated onset date is highly
+inconsistent between states. This only further corroborates the decision to
+exclude zero delays from the data set when estimating the delay distribution. 
+
+\smallskip
+\paragraph*{Delay Distribution Estimation.}
+
+From the public line list, we estimate the delay distribution at each time $t$, 
+namely the probabilities in \eqref{eq:delay_prob2} for $k=1,\ldots,d$, using the  
+empirical distribution of all lags, excluding zero, between complete onset and
+report dates, for all onset dates falling in $[t-2d+1, t]$. Then, we fit a gamma
+density to the empirical distribution by the method of moments, and discretize
+the resulting density over the support $\{1,\ldots,d\}$. For concreteness,
+this procedure is described in Algorithm~\ref{alg:delay_dist_retro}.   
+
+\begin{algorithm}[tb]
+\caption{Delay distribution estimation, retrospective}
+\label{alg:delay_dist_retro}
+\DontPrintSemicolon
+\KwInput{Time $t$, support size $d$, window size $w=2d$, line list $\D$ 
+  with onset dates $a_i$ and report dates $b_i$.} 
+\KwOutput{Estimated delay probabilities \smash{$\hp_t(1), \ldots, \hp_t(d)$}.}  
+
+Find all pairs in $\D$ with onset dates within a recent time window: $I_t = \{i 
+: a_i \in (t-w, t]\}$. 
+
+Compute the empirical distribution of lags $1,\ldots,d$ among these pairs: 
+$$
+\bp_t(k) = \frac{|\{i \in I_t: b_i - a_i = k\}|}
+{\sum_{\ell=1}^d |\{i \in I_t: b_i - a_i = \ell\}|}, \;\; k=1,\ldots,d. 
+$$
+
+Fit a gamma density to \smash{$\bp_t(1), \ldots, \bp_t(d)$} using the method of
+moments (matching the mean and variance). 
+
+Discretize this gamma density to the support set $\{1,\ldots,d\}$, call the 
+result \smash{$\hp_t(1), \ldots, \hp_t(d)$}, and return these probabilities.
+\end{algorithm}
+
+\begin{figure}[tb]
+\centering
+\includegraphics[width=0.825\linewidth]{./figures/finalized_delay_quantiles.pdf}
+\includegraphics[width=0.825\linewidth]{./figures/overlay_finalized_delay_dist.pdf}
+\caption{Top: quantiles of the estimated delay distribution returned by 
+  Algorithm~\ref{alg:delay_dist_retro} at the levels 50\%, 75\%, and 95\%, as 
+  $t$ varies from June 1, 2020 to June 1, 2021. Bottom: estimated delay
+  distributions overlaid for three nowcast dates within the same time
+  interval.}    
+	\label{fig:line_list_time}
+\end{figure}
+
+We use only ``recent'' pairs of onset and report dates at time $t$ (whose onset
+date lies in $[t-2d+1, t]$) in order to adapt to the nonstationarity in
+reporting delays over time. The top panel in Figure~\ref{fig:line_list_time}
+plots quantiles of the estimated delay distribution from
+Algorithm~\ref{alg:delay_dist_retro}, as $t$ ranges from June 1, 2020 to June 1,
+2021. We see sharp drops in all quantiles during the first half of this period,
+and then a more gradual decline over time. The bottom panel in the figure gives
+a qualitative sense of how the delay distribution estimates change in shape over
+time.
+
+\subsection{Defining Ground Truth}
+\label{sec:ground_truth}
+
+Given the estimated delay distributions over time from the previous subsection, 
+we now describe how to estimate latent infections in the model
+\eqref{eq:conv_model2}. In short, we will solve one large optimization problem
+to perform deconvolution. To define the best possible retrospective estimates of
+latent infections over the period October 1, 2020 to June 1, 2021, which we will
+treat as \emph{ground truth} in what follows (in the sense that they will be the
+point of comparison for all of our real-time estimates), we will perform
+deconvolution over a wider time period than the previously specified one in
+order to avoid any bias issues at the boundaries (where there is insufficient
+data for accurate deconvolution; more details are provided in the next
+section): our retrospective deconvolution runs from May 1, 2020 to August 28,
+2021, a period we denote by $\T$, and uses case data published on August 30,
+2021. 
+
+For location $\ell$, let $y_{\ell,t}$ denote the number of new cases reported at
+$t$ and the number of new infections that have onset at time $t$, respectively,
+per 100,000 people. Note that $y_{\ell,t},x_{\ell,t}$ obey the
+model~\eqref{eq:conv_model2}, \eqref{eq:delay_prob2}, as we have just rescaled
+the underlying counts here by a constant (to put them on the scale of rates),
+and recall, we assume all locations have the same delay distribution
+(Assumption~\ref{asm:geo_invar}).
+
+Given the delay distribution estimates from
+Algorithm~\ref{alg:delay_dist_retro}, \smash{$\hp_t = (\hp_t(1), \ldots, 
+  \hp_t(d))$} for $t \in \T$, we estimate the full vector \smash{$x_\ell =
+  (x_{\ell,t})_{t \in \T}$} of latent infection rates across time, separately
+for each location $\ell$, by solving the problem:   
+\begin{multline}
+\label{eq:tf_retro}
+\minimize_{x_\ell} \; \sum_{t \in \T} \bigg( y_{\ell,t} - \sum_{k=1}^d \hp_t(k)
+\, x_{\ell, t-k} \bigg)^2 +{} \\ \lambda \|D^{(4)} x_\ell\|_1,   
+\end{multline}
+where $D^{(4)}$ is a matrix such that $D^{(4)} v$ gives all 4$\th$-order
+differences of a vector $v$, and $\|\cdot\|_1$ is the $\ell_1$ norm. Problem 
+\eqref{eq:tf_retro} could be called a trend-filtering-regularized least squares 
+deconvolution problem. We solve it (as well as all related optimization problems
+in this paper) numerically with an adaption of the ADMM algorithm of 
+\citet{ramdas2016fast}, detailed in Appendix~\ref{app:tf_admm}. 
+
+The solution \smash{$\hx_\ell$} in problem \eqref{eq:tf_retro} takes the form of
+a cubic piecewise polynomial (discrete spline) with adaptively chosen
+knots \citep{tibshirani2014adaptive, tibshirani2020divided}. The tuning
+parameter $\lambda \geq 0$ controls its complexity, and we choose it using  
+3-fold cross-validation: we hold out every third value from training, and impute
+it by the average of the neighboring trained estimates; to compute the
+validation error, we reconvolve the full vector of imputed infections and
+measure against observed cases. 
+ 
+\section{Real-Time Deconvolution}
+\label{sec:deconv_realtime}
+
+Real-time deconvolution refers to the the task of deconvolving case reports
+observed up until time $t$ to estimate latent infections up until $t$,
+repeatedly, as $t$ marches over the period of interest. We are particularly
+focused on estimating recent latent infections---nowcasting at a $k$-day lag,
+which means estimating at $t$ the latent infection rate at time $t-k$.
+
+Compared to retrospective deconvolution, real-time deconvolution differs in two
+important ways. The first is that we are forced to work with provisional case
+data, subject to revision at times in the future, as discussed earlier in
+Section~\ref{sec:problem_setup}. All of our experiments in what follows use
+properly-versioned data that would have been available as of the nowcast date.
+We use the notation \smash{$y^{(t)}_{\ell,s}$} to reflect the reported case rate
+in location $\ell$ at time $s$ as of time $t$. Reported case data from JHU is
+available at a 1-day lag and therefore, as of time $t$, we only observe
+\smash{$y^{(t)}_{\ell,s}$} up through $s=t-1$ (we use analogous superscript
+notation for all auxiliary signals and estimates). This means we can only
+produce deconvolution estimates \smash{$\hx^{(t)}_{\ell,s}$} up through $s=t-2$ 
+(recall we exclude zero delays, in Assumption~\ref{asm:zero_at_zero}). 
+
+\begin{figure}[tb]
+\centering	
+\includegraphics[width=0.95\linewidth]{./figures/right_truncation_illustration.pdf}
+\caption{Illustration of right truncation with a delay distribution of length 3
+  (which is taken to be stationary for simplicity). At the nowcast time $t$,
+  some ``part'' of the latent signal $x_t$ will appear in $y_{t+1},y_{t+2}$;
+  likewise, some ``part'' of $x_{t-1}$ will appear $y_{t+1}$.}   
+\label{fig:right_truncation}
+\end{figure}
+
+The second issue of note, in real-time deconvolution, is \emph{right
+  truncation}: in nowcasting at lag $k$, where $k$ is small (compared to $d$),
+we are only able to carry out a ``partial'' deconvolution, as much of the needed  
+information would come from case reports occurring in the future, past time the
+nowcast date $t$. Figure~\ref{fig:right_truncation} gives an illustration. Thus,
+if we simply performed real-time deconvolution by solving the problem analogous
+to \eqref{eq:tf_retro}, using data that would have been available at time $t$,   
+\begin{multline}
+\label{eq:tf_realtime1}
+\minimize_{x^{(t)}_\ell} \; \sum_{s < t} \bigg( y^{(t)}_{\ell,s} -
+\sum_{k=1}^d \hp^{(t)}_s(k) \, x^{(t)}_{\ell, s-k} \bigg)^2 +{} \\  
+\lambda \big\|D^{(4)} x^{(t)}_\ell\big\|_1,
+\end{multline}
+then we would find that the solution \smash{$\hx^{(t)}_\ell = (\hx^{(t)}_{\ell,s}
+  : s < t)$} has highly volatile components for $s$ close to $t$.
+
+The problem does not stop there; the truncation of data after the nowcast time
+$t$ also affects estimation of the delay distribution itself. Most rows in the
+line list with an onset date of $s=t-k$, for small $k$, will only have a report
+date (and thus not appear in the line list) until after time $t$. This means
+that the estimate \smash{$\hp^{(t)}_s$} of $p_s$ given by the empirical
+distribution of all available line list data, with report date less than $t$,
+will be biased toward smaller lag values (i.e., it will place too little weight
+on larger lag values).    
+
+In the next two subsections, we work through each of these truncation issues in
+turn, by incorporating extra regularization around the right boundary into the  
+criterion in \eqref{eq:tf_realtime1}, and estimating the delay distribution
+from truncated data using a Kaplan-Meier-like approach. 
+
+\subsection{Incorporating Extra Regularization}
+\label{sec:extra_regularization}
+
+We consider two forms of extra regularization to dampen the variability of trend
+filtering estimates toward the right boundary. 
+
+\smallskip
+\paragraph*{Natural Trend Filtering.}
+
+A natural cubic spline places additional regularity on top of the cubic spline,
+by maintaining that the function be linear beyond the left and right boundary
+points of the underlying domain. Natural trend filtering proceeds in a similar
+vein, but operating in the space of discrete splines; see
+\citet{tibshirani2020divided}. Transporting this idea over to our real-time  
+deconvolution problem \eqref{eq:tf_realtime1}, and applying it to the right
+boundary only, gives:
+\begin{equation}
+\label{eq:tf_realtime2}
+\begin{alignedat}{2}
+&\minimize_{x^{(t)}_\ell} \; && \sum_{s < t} \bigg( y^{(t)}_{\ell,s} -
+\sum_{k=1}^d \hp^{(t)}_s(k) \, x^{(t)}_{\ell, s-k} \bigg)^2 +{} \\  
+& && \hspace{100pt} \hfill
+\lambda \big\|D^{(4)}  x^{(t)}_\ell \big\|_1 \\
+&\subjectto && \;\; x^{(\ell)}_t - 2x^{(\ell)}_{t-1} + x^{(\ell)}_{t-2} = 0.
+\end{alignedat}
+\end{equation}
+
+\begin{figure*}[tb]
+\centering
+\includegraphics[width=.315\linewidth]{./figures/ny_tf.pdf}
+\includegraphics[width=.315\linewidth]{./figures/ny_ntf.pdf}
+\includegraphics[width=.315\linewidth]{./figures/ny_tapered_ntf.pdf}
+\caption{Comparison of boundary behavior for real-time deconvolution in New 
+  York, displayed for a sample of nowcast dates. The black dashed line indicates 
+  finalized infections, estimated roughly three months after June 1, 2021.}
+\label{fig:boundary_comparison}
+\end{figure*}
+
+The left and middle panels of Figure~\ref{fig:boundary_comparison} demonstrate
+the improvement that the additional constraints in \eqref{eq:tf_realtime2} can
+have on the boundary estimates, particularly during periods of dynamic change in
+the underlying case trajectories.
+
+\smallskip
+\paragraph*{Tapered Smoothing.}
+
+The right truncation phenomenon is not a binary one and there is increasingly
+less and less information available for deconvolution as we move the time index
+$s$ up toward the nowcast date $t$. Therefore, we design a second penalty to add
+to the criterion in \eqref{eq:tf_realtime2} to gradually increase the amount of
+regularization accordingly:  
+\begin{equation}
+\label{eq:tf_realtime3}
+\begin{alignedat}{2}
+&\minimize_{x^{(t)}_\ell} \; && \sum_{s < t} \bigg( y^{(t)}_{\ell,s} -
+\sum_{k=1}^d \hp^{(t)}_s(k) \, x^{(t)}_{\ell, s-k} \bigg)^2 +{} \\  
+& && \hspace{25pt} \hfill
+\lambda \big\|D^{(4)} x^{(t)}_\ell \big\|_1 +
+\gamma \big\|W^{(t)} D^{(1)} x^{(t)}_\ell \big\|_2^2 \\ 
+&\subjectto && \;\; x^{(\ell)}_t - 2x^{(\ell)}_{t-1} + x^{(\ell)}_{t-2} = 0, 
+\end{alignedat}
+\end{equation}
+where $D^{(1)} v$ gives the first-order differences of a vector $v$, and 
+$W^{(t)}$ is a diagonal matrix that is supported on the last $d$ diagonal
+entries, these being (in reverse order, starting with the last entry): 
+$$
+\frac{1}{\sqrt{\hF^{(t)}_{t-1}(k)}}, \;\; k=1,\dots,d, 
+$$
+where \smash{$\hF^{(t)}_{t-1}$} is the cumulative distribution function (CDF) 
+corresponding to the estimated delay distribution \smash{$\hp^{(t)}_{t-1}$} at
+the most recent time $t-1$. The parameter $\gamma \geq 0$ controls the
+strength of the additional ``tapered'' penalty in \eqref{eq:tf_realtime3}, and
+we tune $\lambda,\gamma$ with a two-stage cross-validation procedure: 
+\begin{enumerate}
+\item fix $\gamma =0$, and tune $\lambda$ using 3-fold cross-validation,
+  as before;    
+\item fix $\lambda$ at the value in Step 1, and tune $\gamma$ using 
+  7-fold forward-validation: for $s= t-2, \ldots, t-8$, we solve the
+  deconvolution problem with a working nowcast date of $s$, linearly extrapolate
+  to impute an estimate at $s+1$, and then we reconvolve the solution vector
+  along with this imputed point and measure error against observed cases at time
+  $s+1$; the validation error is obtained by averaging these errors over the
+  iterations $s =  t-2, \ldots, t-8$. 
+\end{enumerate}
+
+\begin{figure*}[tb]
+\centering
+\includegraphics[width=0.95\linewidth]{./figures/effect_tapered_ntf.pdf}
+\caption{Effect of the tapered smoothing penalty, as we vary the 
+corresponding tuning parameter $\gamma$, for a single real-time 
+deconvolution example with on nowcast date February 1, 2021. The gray 
+region highlights the  components on which the tapered smoothing penalty 
+acts.}
+\label{fig:tapered_smooth}
+\end{figure*}
+
+Figure~\ref{fig:tapered_smooth} displays the effect of varying $\gamma$ on the
+solution in \eqref{eq:tf_realtime3}, for a particular deconvolution example, to
+give a qualitative sense of the role of the tapered penalty. Furthermore, the
+right panel in Figure~\ref{fig:boundary_comparison} demonstrates the benefit
+this penalty can provide in nowcasting.
+
+\begin{figure}[tb]
+\centering
+\includegraphics[width=0.825\linewidth]{./figures/tapered_smoothing_03_small_square.pdf}
+\caption{Comparing regularization approaches by MAE for nowcasting. Each
+  additional regularization method gives a huge improvement on trend filtering,
+  and the biggest improvement is from using natural trend filtering constraints
+  and a tapered smoothing penalty combined.}      
+	\label{fig:extra_reg}
+\end{figure}
+
+Lastly, and importantly, Figure~\ref{fig:extra_reg} quantifies the improvement
+offered by the additional regularization mechanisms, in terms of mean absolute
+error (MAE) measured against finalized infections in nowcasting at a $k$-day
+lag, for each $k=2,\ldots,10$. This is averaged over all locations and every
+10th nowcast date in the evaluation set. We see a considerable improvement in 
+both the natural trend filtering and tapered smoothing modifications, with the
+biggest improvement occurring when the two are combined as in
+\eqref{eq:tf_realtime3}, and hence we stick with this framework in what follows. 
+
+\subsection{Adjusting the Delay Distribution for Truncation}   
+\label{sec:delay_adjust}
+
+Now we propose an iterative adjustment to the empirical distribution of
+truncated line list data in order to overcome the truncation bias. To develop
+intuition, we first describe the problem using a simple abstraction, formulate a
+general solution, and then we translate this back over to our particular
+setting.   
+
+\smallskip
+\paragraph*{KM-Adjustment Under Truncation.}
+
+Suppose $p$ is a distribution that is supported on $\{1,\ldots,d\}$, and we observe
+independent random draws that we can partition into two sets: $\D_1$ and $\D_2$,
+where $\D_2$ contains draws from $p$ and $\D_1$ contains draws from $p$
+conditional on the random variable lying in $[1,z_1]$, for a fixed $z_1 \in
+\{1,\ldots,d\}$. Denote by \smash{$\hp_\D$} the empirical distribution based on
+a data set $\D$. Clearly \smash{$\hp_{\D_2}$} is unbiased for $p$, but
+\smash{$\hp_{\D_1}$} is generally biased (it always places zero mass above
+$z_1$), and thus the pooled estimate \smash{$\hp_{\D_1 \cup \D_2}$} would be
+biased as well.
+
+To build a more informed estimate based on the pooled sample, the intuition 
+is as follows. First, observe that the only way we can estimate $p(k)$ for $k > 
+z_1$ is by using $\D_2$. Then, this gives an estimate of \smash{$S(z_1) =
+  \sum_{k >  z_1} p(k)$}, the survival function of $p$ at $z_1$, and we can
+estimate $p(k)$ for $k \leq z_1$, denoting $Z \sim p$, by observing that  
+$$
+p(k) = \P(Z = k \,|\, Z \leq z_1) (1-S(z_1)).
+$$
+where we estimate $\P(Z = k | Z \leq z_1)$ using the empirical distribution     
+over the set $\D_1 \cup \D_2 \cap [1, z_1]$. In other words, we construct our   
+distribution estimate \smash{$\bp$} using two steps:     
+\begin{enumerate}
+\item define $\bp(k) = \hp_{\D_2}(k)$ for $k > z_1$, and also $\bS(z_1) =
+  \sum_{k >  z_1} \bp(k)$;
+\item define $\bp(k) = \hp_{\D_0}(k) (1-\bS(z_1))$ for $k \leq z_1$, where we
+  let $\D_0 = \D_1 \cup \D_2 \cap [1, z_1]$. 
+\end{enumerate}
+
+We can readily generalize the above to a setting in which we observe $N$ data 
+sets, with varying levels of truncation:
+\begin{equation}
+\label{eq:data_seq_trunc}
+\text{$\D_i$ contains draws $Z \sim p \,| Z \leq z_i$, $i=1,\ldots,N$},
+\end{equation}
+where $1 \leq z_1 < \cdots < z_N = d$, and we set $z_0=0$ for notational
+simplicity. To construct an estimate of $p$ based on all the samples, we proceed 
+iteratively as before: first we estimate $p(k)$ for $k > z_{N-1}$ based on the
+data in $\D_N$, then we estimate $p(k)$ for $k \in (z_{N-2},z_{N-1}]$ based on
+data in $\D_{N-1} \cup \D_2 \cap [1, z_{N-1}]$, and so on. 
+Algorithm~\ref{alg:dist_seq_trunc} spells out the procedure in full. 
+
+\begin{algorithm}[tb]
+\caption{Distribution estimation under sequential truncation} 
+\label{alg:dist_seq_trunc}
+\DontPrintSemicolon
+\KwInput{Data sets and truncation limits $\D_i$ and $z_i$, for $1,\ldots,N$, as 
+  in \eqref{eq:data_seq_trunc}.}    
+\KwOutput{Estimated probabilities \smash{$\bp(1),\ldots,\bp(d)$}.}
+
+Initialize $\bS(d) = 0$. 
+
+\For{$i = N, \ldots, 1$} {
+  Set $\D_0 = \bigcup_{j=i}^N D_j \cap [1, z_i]$.
+  
+  Compute $\bp(k)$, for $k \in (z_{i-1}, z_i]$ based on the empirical
+  distribution of data in $\D_0$ and an estimate of the survival function at
+  $z_i$:     
+  $$
+  \bp(k) = \hp_{\D_0}(k) (1-\bS(z_i)), \;\; k \in (z_{i-1}, z_i].
+  $$
+  
+  Compute an estimate of the survival function at $z_{i-1}$: 
+  $$
+  \bS(z_{i-1}) = \bS(z_i) + \sum_{k \in (z_{i-1}, z_i]} \bp(k). 
+  $$
+}
+
+Return \smash{$\bp(1),\ldots,\bp(d)$}. 
+\end{algorithm}
+
+The algorithm just derived may be seen as Kaplan-Meier-like, in the sense that 
+it is motivated by the decomposition
+$$
+p(k) = \P(Z=k \,|\, Z \leq z_i) (1-S(z_i)), \;\; k \in (z_{i-1}, z_i]. 
+$$
+We use an unbiased plug-in estimate for each term in the product above  
+based on the appropriate data. The Kaplan-Meier estimator has a similar plug-in 
+foundation \citep{kaplan1958nonparametric}, so we refer to our approach as the  
+\emph{KM-adjusted estimator} of the distribution under truncation. 
+
+\smallskip
+\paragraph*{Application to CDC Line List.}
+
+Porting the last idea over to the CDC line list, we can use it to estimate the
+delay distribution at time $s$ using the line list as of time $t$. Note that if
+$s < t-d$ then we can still use Algorithm~\ref{alg:delay_dist_retro}, as
+there is no truncation issue whatsoever. However, if $s \geq t-d$, then we would 
+need to apply the KM-adjusted estimator, because we would be using the rows in
+the line list whose onset date is at or shortly before $s$, but are only able to
+see those whose report date is at most $t-1$ (thus would have been available 
+at time $t$). After making this adjustment to the empirical distribution, we
+apply gamma smoothing as before. This is detailed in
+Algorithm~\ref{alg:delay_dist_realtime}. 
+
+\begin{algorithm}[tb]
+\caption{Delay distribution estimation in real-time}
+\label{alg:delay_dist_realtime}
+\DontPrintSemicolon
+\KwInput{Nowcast time $t$, working onset time $s$, support size $d$, window size 
+  $w=2d$, truncated line list \smash{$\D^{(t)}$} with onset dates $a_i$ and report
+  dates $b_i$ such that $b_i < t$.}  
+\KwOutput{Estimated delay probabilities \smash{$\hp^{(t)}_s(1), \ldots,
+    \hp^{(t)}_s(d)$}.}   
+
+\If{$s < t-d$} {
+  Return probability estimates from Algorithm~\ref{alg:delay_dist_retro}
+  (setting $t=s$ and \smash{$\D=\D^{(t)}$} in the notation of that algorithm).} 
+
+Set $N=d-(t-s)+2$. 
+
+\For{$i = 1, \ldots, N-1$} {
+  Define 
+  \begin{align*}
+  \D_i &= \{ b_i - a_i :  a_i = s-i+1 \} \\
+    z_i &= t-s+i-2. 
+  \end{align*}
+}
+
+Define $\D_N = \{ b_i - a_i :  a_i \in (s-w, t-d) \}$ and $z_N = d$.
+
+Use Algorithm~\ref{alg:dist_seq_trunc} (applied to $\D_i$, $z_i$,
+$i=1,\ldots,N$) to compute probability estimates \smash{$\bp_t(1), \ldots, 
+  \bp_t(d)$}. 
+
+Fit a gamma density to \smash{$\bp_t(1), \ldots, \bp_t(d)$} using the method
+of moments (matching the mean and variance). 
+
+Discretize this gamma density to the support set $\{1,\ldots,d\}$, call the 
+result \smash{$\hp_t(1), \ldots, \hp_t(d)$}, and return these probabilities. 
+\end{algorithm}
+
+\begin{figure}[tb]
+\centering
+\includegraphics[width=0.825\linewidth]{./figures/range_overlay.pdf}
+\includegraphics[width=0.825\linewidth]{./figures/l1_summary.pdf}
+\caption{Top: estimated delay distributions overlaid for all nowcast dates in
+  the month of November 2020, when $s=t-1$ (working onset date one day 
+  before the nowcast date). Bottom: mean $\ell_1$ distance to finalized
+  estimate of the delay distribution, as a function of the lag $k=t-s$.}     
+\label{fig:delay_dist_realtime}
+\end{figure}
+
+Figure~\ref{fig:delay_dist_realtime} compares the KM-adjusted and naive
+estimates of the delay distribution, Algorithm~\ref{alg:delay_dist_realtime}
+versus Algorithm~\ref{alg:delay_dist_retro} applied directly to
+\smash{$\D^{(t)}$}, the line list available at each nowcast date $t$. In terms
+of $\ell_1$ distance, measured to the finalized delay distribution estimate
+computed retrospectively (based on the full untruncated line list), and averaged
+over all  nowcast dates in the evaluation period, we see that the KM-adjustment
+greatly improves the accuracy at all lags $k=2,\ldots,10$ (where $k=t-s$, the 
+difference between the nowcast and working onset dates). 
+
+\subsection{Shortening the Deconvolution Window}
+
+Lastly, we investigate shortening the window used in the regularized
+deconvolution problem \eqref{eq:tf_realtime3} so that we use only a window 
+length of $w$ days before $t$:
+\begin{equation}
+\label{eq:tf_realtime4}
+\begin{alignedat}{2}
+&\minimize_{x^{(t)}_\ell} \; && \sum_{s \in [t-w, t)} \bigg( y^{(t)}_{\ell,s} - 
+\sum_{k=1}^d \hp^{(t)}_s(k) \, x^{(t)}_{\ell, s-k} \bigg)^2 +{} \\  
+& && \hspace{25pt} \hfill
+\lambda \big\|D^{(4)} x^{(t)}_\ell \big\|_1 +
+\gamma \big\|W^{(t)} D^{(1)} x^{(t)}_\ell \big\|_2^2 \\ 
+&\subjectto && \;\; x^{(\ell)}_t - 2x^{(\ell)}_{t-1} + x^{(\ell)}_{t-2} = 0, 
+\end{alignedat}
+\end{equation}
+As we are mainly interested in the components of the solution
+\smash{$\hx^{(t)}_s$} for $s$ close to $t$, shortening the training window is
+computationally advantageous and should not change the behavior of the solution
+very much for $s$ close to $t$.
+
+\begin{figure}[tb]
+\centering
+\includegraphics[width=0.825\linewidth]{./figures/deconvolution_window_05_small_square.pdf}
+\caption{Comparing window lengths used in regularized deconvolution by
+  MAE for nowcasting. The performance is very similar throughout.}
+\label{fig:deconvolution_window}
+\end{figure}
+
+Figure~\ref{fig:deconvolution_window} compares \eqref{eq:tf_realtime4} with
+$w=2d$, $w=4d$, and ``all-past'', which is the original problem
+\eqref{eq:tf_realtime3}, in terms of mean absolute error (MAE) measured against
+finalized infections in nowcasting at a $k$-day lag, for each
+$k=2,\ldots,10$. This is averaged over all locations and every 10th nowcasting
+date in the evaluation set. The performance is basically identical for window
+lengths $2d$ and $4d$, and though all-past may appear to have the slightest 
+advantage, this does not warrant the extra computation, hence in what follows
+we stick to \eqref{eq:tf_realtime4} with a window length $w=2d$ as our
+real-time deconvolution estimator.    
+
+\section{Leveraging Auxiliary Signals}
+\label{sec:leverage_aux}
+
+The indicators enumerated in Section~\ref{sec:preliminaries} have displayed
+impressive correlations to reported COVID-19 cases \citep{Reinhart:2021}, and
+moreover, demonstrated an ability to improve the accuracy of case forecasting
+and hotspot prediction models \citep{McDonald:2021}. In this section, we
+describe how to use each indicator to build a real-time \emph{sensor} that
+estimates the latent infection rate, and how to fuse such estimates together
+into a single nowcast.
+
+\subsection{Sensor Models}
+\label{sec:sensor_models}
+
+At each prediction time $t$, for each location $\ell$, and for each of the five
+indicators (abbreviated CHNG-COVID, CHNG-CLI, DV-CLI, CTIS-CLIIC, and
+Google-AA), we will train a model to predict in real-time
+latent infections from indicator values. Let \smash{$\hx^{(t)}_{\ell,s}$} denote
+the solution at time $s$ in problem \eqref{eq:tf_realtime4}, which represents
+our best estimate of the latent infection rate at time $s$ as of time $t$ from
+deconvolution of case rates alone. 
+
+We use \smash{$z^{i,(t)}_{\ell,s}$} to denote the value of indicator $i$ at time
+$s$ and location $\ell$, as of time $t$. We fit a simple linear model to predict 
+latent infections from indicator values by solving 
+\begin{equation}
+\label{eq:sensor_reg}
+\minimize_{\beta_0, \beta_1} \; \sum_{s = t-d}^{t-\tilde{k}_i}
+w^{(t)}_s \big( \hx^{(t)}_{\ell,s} - \beta_0 - \beta_1 z^{i,(t)}_{\ell,s} \big)^2,
+\end{equation}
+which is a weighted linear regression over the time period $[t-d,
+t-\tilde{k}_i]$, where \smash{$\tilde{k}_i = \max\{k_i, 2\}$} and $k_i$ denotes
+the lag at which indicator $i$ is available. This is:
+\begin{itemize}
+\item $k_i=1$ for CTIS-CLIIC and
+  Google-AA\footnote{Our treatment of Google-AA is different from the 
+  rest. Google's team did not start publishing this signal until September 2020,
+  and the historical latency of this signal was sporadic, but was often longer
+  than 1 week. However, unlike (say) the claims-based signals, revisions are
+  never made after initial publication, and the latency of the signal is not an
+  unavoidable property of the data type, and therefore we use finalized signal
+  values, with a 1-day lag, in our analysis.}; and 
+\item $k_i=4$ for the claims-based indicators, due to heavy revision or
+  ``backfill'' over the first several days in the underlying claims data after
+  an outpatient visit date \citep{Reinhart:2021}. 
+\end{itemize}
+Notice that, as defined, \smash{$\tilde{k}_i$} is the lag at which \emph{both}
+the deconvolution estimate of infection rate and auxiliary signal $i$ are
+available, which is the data we need to fit the linear sensor model (response
+and covariate data, respectively). 
+
+The observation weights in \eqref{eq:sensor_reg} are given by
+$$
+w^{(t)}_{t-k} = \hS^{(t)}_{t-1}(k-1), \;\; k=1,\ldots,d.
+$$ 
+Here \smash{$\hS^{(t)}_{t-1}$} is the survival function of
+\smash{$\hp^{(t)}_{t-1}$}, the estimated delay distribution from the most recent
+time point $t-1$. We define \smash{$\hS^{(t)}_{t-1}(1) = 1$}, corresponding to 
+the exclusion of 0-day delays. This scheme upweights the more recent estimates
+(responses in the regression) of latent infections as they contain more timely
+information for nowcasting (assuming that the right-truncation bias has been
+effectively mitigated in the deconvolution step).
+
+Given the solution \smash{$\hbeta^{i,(t)}_{\ell,0}, \hbeta^{i,(t)}_{\ell,1}$} in
+\eqref{eq:sensor_reg}, we then define a sensor---which is just a prediction from
+the fitted linear model---based on indicator $i$, for time $s$ and location
+$\ell$, as of time $t$, as:
+\begin{equation}
+\label{eq:sensor_def}
+\bx^{i,(t)}_{\ell,s} = \hbeta^{i,(t)}_{\ell,0} + \hbeta^{i,(t)}_{\ell,1} \,
+z^{i,(t)}_{\ell,s}. 
+\end{equation}
+This sensor is available up until $s=t-k_i$. For the CTIS-CLIIC and Google-AA
+sensors, the lag is $k_i=1$, smaller than the inherent lag of 2 in the
+deconvolution estimate. 
+
+In brief, each sensor model takes a certain indicator and transforms it---using
+a location-specific and time-varying mapping---to the scale of local infection
+rates. While this mapping is simple (based on linear regression), it is also
+highly nontrivial, as it inherently accounts for geographic biases and
+nonstationarity.
+
+Finally, in addition to defining sensors based on \eqref{eq:sensor_reg},
+\eqref{eq:sensor_def} for each of the five auxiliary sensors, we also define a
+sixth sensor based on a 3$\rd$ order autoregressive model trained on
+\smash{$\hx^{(t)}_\ell = (\hx^{(t)}_{\ell,s} : s < t)$}. It is constructed 
+exactly as in \eqref{eq:sensor_reg}, \eqref{eq:sensor_def} (same weights and
+same training window). Henceforth we abbreviate it AR(3). 
+
+\subsection{Sensor Missingness}
+
+\begin{figure*}[tb]
+\centering
+\includegraphics[width=0.9\linewidth]{./figures/availability.pdf}
+\caption{Proportion of observed (non-missing) values over the evaluation 
+  period from October 1, 2020 to June 1, 2021, and over all locations, as a 
+  function of lag $k=1,\ldots,10$. (NTF refers to the real-time deconvolution
+  estimator, and simple average refers to the sensor fusion method that 
+  averages all available sensors.) The bottom two rows reflect the
+  intersection of location-time pairs for which all data---deconvolution 
+  estimates and sensors---are available for that given lag, with and
+  without including the Google-AA sensor, since this sensor has a large amount
+  of individual missingness. Each intersection at each given lag $k$ is restricted
+  to data whose latency is not greater than $k$. For example, the bottom
+  leftmost cell computes the porportions of locations and dates at which AR(3), 
+  CTIS-CLIIC, and the simple average are concurrently available.} 
+\label{fig:sensor_avail}
+\end{figure*}
+
+To be clear \eqref{eq:sensor_reg}, \eqref{eq:sensor_def} are to be implicitly
+understood as performed over observed (non-missing) indicator values. If an
+indicator value is missing at a particular location and time, then we drop it
+from the training set in \eqref{eq:sensor_reg}, and do not produce a
+corresponding sensor value in \eqref{eq:sensor_def}. For a summary of
+missingness in the sensors, see Figure~\ref{fig:sensor_avail}.
+
+In general, an indicator will be missing when there is insufficient underlying
+data (from surveys, medical claims, etc.) to form a reliable signal value at a
+given location and time. However, the situation is different for the Google-AA
+indicator: here missingness occurs because the COVID-19 search trends data set
+is released after using a differential privacy layer \citep{Bavadekar:2020}, and
+a missing value means that the level of noise added for privacy protection is
+high compared to the search count. Therefore we impute missing Google-AA signal
+values by zeros in our analysis; we do this unless the Google-AA signal was
+missing for a particular location and \emph{all} times in the evaluation period,
+in which case we leave it as missing for this location entirely.
+
+\subsection{Sensor Fusion}
+\label{sec:sensor_fusion}
+
+Sensor fusion (SF), broadly speaking, refers to the process of assimilating  
+data sources, each of which ideally contains complementary information, in order
+to produce more accurate estimates or predictions. SF falls into the general 
+class of ensemble methods, and the sensors constructed in the previous section
+can be thought of as base learners, to be subsequently combined.
+
+We consider the following five ensemble methods. In each case, we describe how
+to form the estimate at time $s$ and location $\ell$ as of time $t$. Though not
+explicitly stated, it is to be implicitly understood that all sensor values are
+as of time $t$ as well. 
+
+\begin{enumerate}
+\item Simple average: the average of available sensors at time $s$ and location 
+  $\ell$. 
+\item Simple regression: the prediction from a linear regression model at time
+  $s$ and location $\ell$, fit to available sensors over the training period at
+  location $\ell$. 
+\item Ridge: the prediction from a ridge regression model at time $s$ and
+  location $\ell$, fit to available sensors over the training period and over
+  locations $j$ such that $j,\ell$ lie in the same U.S.\ state (including the
+  state sensor itself).   
+\item Lasso: same as in the last item, but using the lasso instead of ridge
+  regression. 
+\item KF-SF: the Kalman-Filter-inspired method for sensor fusion from
+  \citet{Farrow:2016, Jahja:2019}, with covariance shrinkage, and
+  operating on the geographical hierarchy within each U.S.\ state. 
+\end{enumerate}
+Methods 2--5 are trained on the most recent $2d$ time points, and 3--5 are tuned
+using 7-fold forward validation, where we allow them to choose a lag-specific
+tuning parameter. Methods 1--2 are ``simple'' in the sense that for nowcasting
+at a location $\ell$ they use sensors from $\ell$ only. Methods 3--5 are more
+sophisticated in that they pool information across locations within the same
+state. % (using sensors from neighboring counties and from the parent state for  
+% nowcasting in a given county).
+
+The KF-SF method requires a proper geographical hierarchy and thus we create
+``rest-of-state'' jurisdictions by aggregating the remaining counties (outside
+of the top 200 counties nationally) within each state, and to run KF-SF, we
+create an AR(3) sensor at these rest-of-state locations (since one sensor at
+each location is sufficient). It is worth noting that, as shown in
+\citet{Jahja:2019}, KF-SF bears a close connection to ridge in Model 4: it 
+is in fact equivalent to a modified ridge optimization problem that imposes
+additional linear constraints. 
+
+\section{Evaluation}
+\label{sec:evaluation}
+
+We now evaluate nowcasting performance over all locations and all but every 10th
+nowcasting date in our evaluation period from October 1, 2020 to June 1,
+2021. (We do this because it gives us a ``pure'' test set, since every 10th
+nowcasting date was already used to choose the real-time deconvolution
+methodology in Section~\ref{sec:deconv_realtime}.) As before, we compare to
+finalized estimates of infection rates computed via retrospective deconvolution,
+as in Section~\ref{sec:deconv_retro}. 
+
+For the purposes of making fair comparisons, in every analysis (figure) that we
+present, we only aggregate over the intersection of nowcasts dates and locations
+at which the particular estimates under consideration---coming from real-time 
+deconvolution, individual sensor models, or sensor fusion---are all
+available. Abiding by this rule leads us to examine several different ways of
+stratifying results, as the full intersection is fairly sparse (see the
+second-to-last row in Figure~\ref{fig:sensor_avail}). In particular, we
+consider the following two dimensions used to define strata:\footnote{To be
+  explicit, when we say we do not ``include'' certain sensors, it means both 
+  that we ignore results from their individual sensor models (in computing the
+  common intersection of available nowcast dates and locations), and \emph{also}
+  that we exclude them in running the sensor fusion methods.}  
+\begin{itemize}
+\item inclusion of Google-AA or not; 
+\item inclusion of all claims-based sensors (CHNG-CLI, CHNG-COVID, and DV-CLI)
+  or not. 
+\end{itemize}
+In what follows, we first examine the performance of individual sensor models
+and a certain sensor fusion method (the simple average) compared to real-time
+deconvolution, and then examine the relative performance of the different sensor
+fusion methods.  
+
+\subsection{Performance of Sensors and Sensor Fusion}
+
+We begin by comparing the MAE of nowcasts from natural trend filtering (NTF) 
+using tapered smoothing, as in \eqref{eq:tf_realtime4} (the real-time
+deconvolution estimator chosen based on the analysis in
+Section~\ref{sec:deconv_realtime}) to those from individual sensor models and
+the simple average sensor fusion method. Despite its simplicity, the simple
+average appears to be the best-performing sensor fusion method overall (details
+in the next subsection), and so we stick with it as the de facto sensor fusion
+method in this subsection. The results here do not include Google-AA; results
+including Google-AA are shown in Appendix~\ref{app:eval_plots}. 
+
+Figure~\ref{fig:mae_all_no_google_aa} displays the MAE from various methods as
+a function of lag $k$. The top and bottom panels do not and do include the 
+claims-based sensors, respectively. In either case, we see that up until
+lag 6, all sensors outperform the real-time deconvolution estimate from NTF. The
+simple average of all sensors improves accuracy even further, and achieves the
+best MAE for all lags up through lag 6. We recall that NTF (with tapered
+smoothing) itself already provides a huge increase in accuracy over the more
+naive method for real-time deconvolution given by applying trend filtering
+without extra boundary regularization (Figure~\ref{fig:extra_reg}). 
+At lag 7, the NTF estimate catches up to about equal accuracy, and then
+surpasses sensor fusion and all sensors in accuracy at lag 8 and onward. An
+interpretation for this: right truncation ceases to be a significant problem
+past lag 7, and thus we are better off performing deconvolution directly in
+order to estimate infections more than a week into the past.   
+
+\begin{figure}[tb]
+\centering 
+\includegraphics[width=0.825\linewidth]{./figures/lineplot_no_claims_no_google_aa.pdf} 
+\includegraphics[width=0.825\linewidth]{./figures/lineplot_claims_no_google_aa.pdf}
+\caption{Comparing NTF to individual sensor models and the simple average sensor
+  fusion method by MAE for nowcasting. The top panel excludes the claims-based
+  sensors, whereas the bottom includes them. For lags smaller than 7, all
+  methods improve upon NTF (with tapered smoothing), with simple average being 
+  the best among them.}    
+\label{fig:mae_all_no_google_aa}
+\end{figure}
+
+Figure~\ref{fig:sensor_rank_no_google_aa} displays the empirical distributions
+of ranks of nowcast errors coming from each method, computed with respect to
+each other, over common nowcast tasks (defined by a location-date-lag
+triplet). For example, in a particular nowcast task, we assign a rank of 1 to
+the method with the smallest absolute error for that nowcast task. The top panel
+again excludes claims-based signals, and the bottom panel includes them. The
+striking feature in either panel, particularly the bottom panel, is that the
+simple average has a highly distinctive distribution of ranks---it is rarely the
+best method, but never the worst. While this is not particularly surprising
+(averaging random variables tends to be variance-reducing, as long as the
+variables are not too correlated), it also points to a key property of sensor
+fusion---a certain kind of robustness, beyond accuracy.
+
+\begin{figure}[tb]
+\centering
+\includegraphics[width=0.95\linewidth]{./figures/rankplot_claims_no_google_aa.pdf}
+\includegraphics[width=0.95\linewidth]{./figures/rankplot_no_claims_no_google_aa.pdf}
+\caption{Comparing NTF to individual sensor models and the simple average sensor
+  fusion method by relative ranks over common nowcast tasks. The top panel
+  excludes all claims-based sensors and considers lags 1--5, whereas the bottom
+  panel includes them and considers lags 4--9 (the first 5 lags at which all
+  methods are available, in either case). The simple average exhibits striking
+  consistency: it is rarely the best, but also never the worst.} 
+	\label{fig:sensor_rank_no_google_aa}
+\end{figure}
+
+\subsection{Relative Performance of Sensor Fusion Methods}
+ 
+We now compare the various sensor fusion methods to each other. The results here
+do not include claims-based signals; results including claims-based signals are
+shown in Appendix~\ref{app:eval_plots}. Figure~\ref{fig:mae_sml} displays the
+MAE of the various sensor fusion estimates, but divided up into three panels,
+defined by averaging over small, medium, and large states (the figure caption
+provides more details). Recall that for the lasso, ridge, and KF-SF approaches,
+a model in a particular county is fit using the sensors from other counties in
+the same state. Larger states have more pooling of information across locations
+and present a greater potential for gains in accuracy. We see that the simple
+average method is typically the best sensor fusion method at each lag, but for
+medium and large states, KF-SF catches up with it and is just about as accurate.
+
+\begin{figure*}[tb]
+\centering
+\includegraphics[width=0.95\linewidth]{./figures/boxenplot_no_claims.pdf}
+\caption{Comparing sensor fusion methods by boxenplots of nowcasting
+  errors (each box conveys the level 25\%, 50\%, and 75\% quantiles of the  
+  absolute error distribution.) The three panels average over small (containing
+  less than 5 locations), medium (between 5 and 14 locations), and large (more
+  than 15 locations) states. Simple average performs generally the best
+  throughout, but KF-SF catches up for medium and large states.}  
+	\label{fig:mae_sml}
+\end{figure*}
+
+Figure~\ref{fig:rank_ensemble} displays the relative ranking of sensor fusion
+methods. The simple average and KF-SF methods appear the most favorable
+(often the best, and less so the worst), followed by lasso, then ridge, and 
+lastly simple regression (most often the worst).   
+
+\begin{figure}[tb]
+\centering
+\includegraphics[width=0.95\linewidth]{./figures/rankplot_fusion_no_claims.pdf}
+\caption{Comparing sensor fusion methods by relative ranks over common nowcast 
+  tasks, and considering only lags 1--5. The simple average and KF-SF methods
+  consistently perform in the top half, while simple regression is most often
+  the worst.}
+	\label{fig:rank_ensemble}
+\end{figure}
+
+\section{Discussion}
+\label{sec:discussion}
+
+In this work, we proposed, implemented, and evaluated a framework for real-time
+estimation of new symptomatic COVID-19 infections from case reports. At time
+$t$, in order to nowcast the infection rate at time $t-k$ (for small values of
+$k$, such as $k=1,2,\ldots$), the main steps are to:  
+\begin{enumerate}
+\item estimate a symptom-onset-to-case-report delay distribution using the most 
+  recent data available in a line list provided by the CDC;  
+\item perform regularized deconvolution on the most recent case data available 
+  from JHU CSSE; 
+\item update models to track recent infection rates from various auxiliary
+  signals (based on COVID-related data from medical insurance claims, online
+  surveys, and Google searches), and fuse together the predictions from these
+  models in order to stabilize recent estimates of infection rates. 
+\end{enumerate}
+In each step, we proposed methodological advances that improved the accuracy of
+our nowcasts, when measured against finalized infection rate estimates obtained
+by retrospective deconvolution (using data that would have only been available 
+months later). While using auxiliary signals (step 3) did help in terms of
+accuracy and robustness, the additional regularization devices that we
+incorporated into real-time deconvolution (step 2) ended up providing the
+biggest benefit to accuracy. 
+
+To reiterate, we purposely defined our target of estimation to be symptomatic
+infections that would eventually show up in public health reports, allowing us
+to focus on developing and testing tools for real-time deconvolution and sensor
+fusion, with minimal assumptions (e.g., without a mechanistic model for disease
+spread). Estimating the number of true symptomatic infections at any point in
+time---whether or not they will appear in case reports---is of course a much
+harder problem. However, our methodology may be seen as a contribution toward
+solving this larger problem in real-time; moreover, some simple post hoc
+corrections could be applied to our real-time estimates in order to adjust for
+confounding. For example, if $a_{\ell,t}$ is the fraction of untested
+symptomatic infections in location $\ell$ at at time $t$, which (say) is
+estimated from external data sources, then we could just multiply each element
+\smash{$\hp^{(t)}_{\ell,s}$} of the delay distribution used in
+\eqref{eq:tf_realtime4} by $b_{\ell,t}=1/(1-a_{\ell,t})$ in order to estimate
+\emph{all} symptomatic infections from case reports. Due to the way we have set
+up the deconvolution problem (cross-validating over optimal choices of tuning
+parameters), this would be essentially equivalent to post-mulitplying the
+nowcast \smash{$\hx^{(t)}_{\ell,s}$} we already produce by $b_{\ell,t}$.
+
+We finish by describing a few directions for future work.
+
+\smallskip
+\paragraph*{Post Hoc Smoothing.}
+
+As we saw in Section~\ref{sec:evaluation}, sensor fusion provides a real-time
+improvement on pure deconvolution up until about a 10-day lag, and past that
+point, the deconvolution estimates appear stable enough that sensor fusion
+becomes unnecessary. While the quantative benefit of sensor fusion for small
+lags is clear, sensor fusion is also lacking in the following qualitative
+aspect: its estimates do not always appear visually smooth across time (this is
+because the sensors themselves need not be smooth over time, and furthermore, 
+sensor fusion may end up using a different subset of sensors at each lag,
+creating additional jaggedness). Post smoothing techniques would be worth
+investigating here, to aid visual consumption.
+
+\smallskip
+\paragraph*{$R_t$ Estimation.} 
+
+The effective reproductive number $R_t$, the average number of secondary
+infections generated from a single primary infection at time $t$, is a useful
+and interpretable parameter that reflects the dynamics of epidemic growth in a  
+population. In the standard SIR model, the effective reproduction number at 
+time $t$ can be approximated using the number of new infections at $t$  
+and $t+1$, denoted by $N_t$ and $N_{t+1}$, via the relationship: 
+\begin{equation}
+\label{eq:log_change_ratio}
+\log \frac{N_{t+1}}{N_t} \approx \gamma (R_t - 1)  
+\end{equation}
+where $\gamma$ denotes the recovery rate in the SIR model. This approximation 
+is based on a simple Taylor series argument, and is used by
+\citet{Bettencourt:2008} and other authors, though for completeness we give
+a derivation for \eqref{eq:log_change_ratio} in
+Appendix~\ref{app:log_change_ratio}.
+
+Though the log-change-ratio approximation \eqref{eq:log_change_ratio} for $R_t$
+is well-known in the literature on mathematical modeling of epidemics, its use
+in the presence of confounding seems to be underexplored and potentially
+undervalued. For simplicity, we will explain the idea in the context of a single
+location. Suppose, as before, that a fraction $a_t$ of infections go untested at
+time $t$. Then we have $N_t = b_t x_t$, where $x_t$ is the number of new
+infections at time $t$ that show up in case reports (the focus of this paper)
+and $b_t = 1/(1-a_t)$. Moreover, from \eqref{eq:log_change_ratio}, we have
+$$
+R_t \approx 1 + \frac{1}{\gamma} \log \frac{b_{t+1} x_{t+1}}{b_t x_t}  
+\approx 1 + \frac{1}{\gamma} \log \frac{x_{t+1}}{x_t},
+$$
+where the last approximation is motivated by an additional assumption the 
+untested fraction varies slowly over time (so that $b_{t+1}/b_t \approx
+1$). The last display shows that estimates of $x_t$ (as we produce in this
+paper), even though $x_t$ is itself confounded due to a lack of universal
+testing, can produce \emph{approximately unconfounded} estimates of $R_t$. This
+is true both in the retrospective and real-time sense, and will be the topic of
+future study.   
+
+% In other words, estimating $R_t$ may be more tractable than estimating $N_t$, 
+% since an assumption of slow-varying bias $b_t$ means that the confounding 
+% ``cancels out'' in the change ratio.  
+
+\smallskip
+\paragraph*{Evaluation via Reconvolution.}
+
+An important avenue for evaluating our methodology (beyond evaluating against
+finalized infection rate estimates, as we do in this paper), would be to
+reconvolve our real-time nowcasts of infection rates forward in time in order to
+predict future case rates, and evaluate these predictions against finalized case
+reporting data. Making and evaluating point predictions would be relatively
+straightforward, however, distributional forecasts are currently the standard in
+epidemiological forecasting (and also in COVID-19 forecasting), and adding a
+distributional layer to our nowcasts (and propagating this through the
+convolution operator) requires substantial new developments, and we leave it to
+future work.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Support information, if any,             %%
+%% should be provided in the                %%
+%% Acknowledgements section.               %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{acks}[Acknowledgments]
+The authors are grateful to Logan Brooks, Roni Rosenfeld, James Sharpnack, Sam 
+Abbott, Joel Hellewell, and Sebastian Funk for several early insightful
+conversations.   
+ 
+MJ was supported by a fellowship from the Center for Machine Learning and 
+Health at Carnegie Mellon. AC and RJT were supported by a gift from Google.org.   
+\end{acks}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Funding information, if any,             %%
+%% should be provided in the                %%
+%% funding section.                        %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{funding}
+%  The first author was supported by ...
+
+%  The second author was supported in part by ...
+% \end{funding}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Supplementary Material, including data   %%
+%% sets and code, should be provided in     %%
+%% {supplement} environment with title      %%
+%% and short description. It cannot be      %%
+%% available exclusively as external link. %%
+%% All Supplementary Material must be       %%
+%% available to the reader on Project       %%
+%% Euclid with the published article.      %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{supplement}
+%\stitle{???}
+%\sdescription{???.}
+%\end{supplement}
+
+\begin{appendix}
+	
+\section{ADMM for Solving Deconvolution Problems}  
+\label{app:tf_admm}
+
+Here we give details on the ADMM approach used to solve the regularized least
+squares deconvolution problems in Sections~\ref{sec:deconv_retro} and
+\ref{sec:deconv_realtime}. We first focus on problem \eqref{eq:tf_retro}, and
+then we discuss the modifications needed when incorporating extra regularization
+for real-time deconvolution as in \eqref{eq:tf_realtime4}. To simplify notation,
+we will henceforth drop the subscript dependnece of all quantities on the
+location $\ell$, as well as the superscript dependence on the nowcast date $t$
+for the real-time problems.
+
+We also use \smash{$\hP$} to denote the (Toeplitz) convolution matrix with rows
+determined by \smash{$\hp_s$}, $s<t$, i.e., such that for any vector $x$ (of
+appropriate dimension) 
+$$
+(\hP x)_s = \sum_{k=1}^d \hp_k x_{s-k}.
+$$
+(We leave the dimensions of \smash{$\hP$} and $x$ here purposely ambiguous,
+which should always be clear from the context anyway; this allows us to borrow
+similar notation across problems with different underlying dimensions.) Thus we
+can rewrite \eqref{eq:tf_retro} as 
+$$
+\minimize_x \; \| y - \hP x \|_2^2 + \lambda \|D^{(4)} x\|_1. 
+$$
+To apply ADMM, we must introduce auxiliary variables, and as in
+\citet{ramdas2016fast}, we use the following ``specialized'' decomposition 
+(which improves the convergence speed):
+\begin{alignat*}{2}
+&\minimize_x \; && \| y - \hP x \|_2^2 + \lambda \|D^{(1)} \alpha\|_1 \\ 
+&\subjectto && \;\; \alpha = D^{(3)} x,
+\end{alignat*}
+where we used the recursive nature of the difference operators, writing the
+4$\th$-order operator as a product of the 1$\st$- and 3$\rd$-order operators: 
+\smash{$D^{(4)} = D^{(1)} D^{(3)}$}. The above problem gives rise to the
+augmented Lagrangian: 
+\begin{multline*}
+\cL(x, \alpha, u) = \| y - \hP x \|_2^2 + \lambda \|D^{(1)} \alpha\|_1 +{} \\ 
+\rho \|\alpha -  D^{(3)} x + u\|_2^2 -  \rho \|u\|_2^2, 
+\end{multline*}
+which corresponds to following ADMM updates, writing \smash{$D=D^{(3)}$} for 
+brevity:  
+\begin{align*}
+x &\leftarrow (\hP^T \hP + \rho D^T D)^{-1} \big( \hP^T y + \rho D^T
+    (\alpha + u)\big) \\   
+\alpha &\leftarrow \argmin_z \; \| D x  - u - z \|_2^2 +
+\frac{\lambda}{\rho} \|D^{(1)} \alpha\|_1 \\
+u & \leftarrow u + \alpha - D x.
+\end{align*}
+The $\alpha$-update here requires solving a 1-dimensional fused lasso problem, 
+which can be done in linear-time with the dynamic programming approach of 
+\citet{johnson2013dynamic}. The $x$-update is more expensive than in pure
+trend filtering (with no convolution operator) but owing to the bandedness of
+\smash{$\hP$} (and $D$, though the bandwidth $d$ of \smash{$\hP$} dominates), it
+can still be solved in $O(nd)$ operations. Further, in this and all applications  
+of ADMM, we follow the recommendation of \citet{ramdas2016fast} and set the
+Lagrangian parameter equal to the tuning parameter, $\rho = \lambda$. 
+
+As for the two extensions presented in \eqref{eq:tf_realtime4}, the natural  
+trend filtering constraints can be be enfored by introducing a linear
+interpolant matrix as described in Section~11.2 of \citet{tibshirani2020divided}.
+This effectively replaces the convolution matrix \smash{$\hP$} and the 3$\rd$
+difference operator $D$, in the ADMM steps above, by \smash{$\tP$} and
+\smash{$\tD$}, respectively, which are given by right multiplying $P$ and $D$ by
+the interpolant matrix.  
+
+Moreover, the additional tapered smoothing term can be pushed into the augmented
+Lagrangian, and only alters the $x$-update, now becoming:       
+\begin{multline*}
+x \leftarrow (\tP^T \tP + \gamma M^T M + \rho \tD)^{-1} \cdot{} \\
+ \big(\tP^T y + \rho \tD^T(\alpha + u)\big),
+\end{multline*}
+where $M$ is the matrix $W^{(t)} D^{(1)}$ in the tapered penalty in
+\eqref{eq:tf_realtime4} times the linear interpolant matrix.
+
+\section{Additional Evaluation Results}
+\label{app:eval_plots}
+
+Figures~\ref{fig:mae_all} and \ref{fig:sensor_rank} are analogous to
+Figures~\ref{fig:mae_all_no_google_aa} and \ref{fig:sensor_rank_no_google_aa},
+but with the inclusion of the Google-AA sensor. Similarly,
+Figures~\ref{fig:mae_sml_claims} and \ref{fig:rank_ensemble_claims} are the
+counterparts to Figures~\ref{fig:mae_sml} and \ref{fig:rank_ensemble}, but with
+the inclusion of claims-based sensors.
+
+\begin{figure}[tb]
+\centering
+\includegraphics[width=0.825\linewidth]{./figures/lineplot_claims.pdf}
+\includegraphics[width=0.825\linewidth]{./figures/lineplot_no_claims.pdf}
+\caption{As in Figure~\ref{fig:mae_all_no_google_aa}, but including Google-AA.}    
+\label{fig:mae_all}
+\end{figure}
+
+\begin{figure}[tb]
+\centering
+\includegraphics[width=0.825\linewidth]{./figures/rankplot_claims.pdf}
+\includegraphics[width=0.825\linewidth]{./figures/rankplot_no_claims.pdf}
+\caption{As in Figure~\ref{fig:sensor_rank_no_google_aa}, but including Google-AA.}
+\label{fig:sensor_rank}
+\end{figure}
+
+\begin{figure*}[tb]
+\centering
+\includegraphics[width=0.95\linewidth]{./figures/boxenplot_claims.pdf}
+\caption{As in Figure~\ref{fig:mae_sml}, but including claims-based signals.}
+\label{fig:mae_sml_claims}
+\end{figure*}
+
+\begin{figure}[tb]
+\centering
+\includegraphics[width=0.95\linewidth]{./figures/rankplot_fusion_claims.pdf}
+\caption{As in Figure~\ref{fig:rank_ensemble}, but including claims-based
+  signals.} 
+\label{fig:rank_ensemble_claims}
+\end{figure}
+
+\section{Log-Change-Ratio Approximation for $R_t$} 
+\label{app:log_change_ratio}
+
+We consider the standard susceptible-infected-recovered (SIR) model
+\citep{Kermack:1927} with transmission rate $\beta$ and recovery rate
+$\gamma$. Let $S(t),I(t),R(t)$ denote the fraction of susceptible, infected,
+recovered individuals, respectively, at time $t$, in some underlying
+population. Then the SIR model evolves according to the continuous-time dynamics
+(subject to some initial conditions):
+\begin{align*}
+S'(t) &= -\beta S(t) I(t) \\
+I'(t) &= \beta S(t) I(t) - \gamma I(t) \\
+R'(t) &= \gamma I(t).
+\end{align*} 
+
+The effective reproduction number in this model is defined as $R_t = S(t) \beta
+/ \gamma$. We can interpret the $R_t$ as being determined by
+the slope of a natural first-order approximation to the curve $\log I(t)$ at
+time $t$. That is, looking back at the differential equation for $I(t)$, if we
+forget about the fact that $S(t)$ actually depends on $t$, this ``looks like'' 
+$I'(t)$ is a ``constant'' times $I(t)$ (that ``constant'' being $\beta S(t) -
+\gamma$), which suggests that for $t$ near a point $t_0$,   
+\begin{align}
+\nonumber
+I(t) &\approx I(t_0) \exp\big( (\beta S(t) - \gamma) (t-t_0) \big) \\ 
+\label{eq:inf_approx}
+&= I(t_0) \exp\big(\gamma (R_t - 1) (t-t_0)\big).
+\end{align}
+
+Now let $T(t)$ denote the total fraction of individuals who have ever been
+infected at time $t$ (note, $T(t) = 1-S(t)$). Then this evolves according to the 
+dynamics: 
+$$
+T'(t) = \beta S(t) I(t).
+$$
+Consider the change in total infecteds from time $t$ to $t+1$, also called the
+\emph{incidence proportion} over this period, denoted $\Delta T(t+1) = T(t+1) - 
+T(t)$. Using this as a discrete approximation to the derivative (backward
+difference) of the total infecteds curve, 
+\begin{align*}
+\Delta T(t+1) &\approx \beta S(t+1) I(t+1) \\
+&\approx \beta S(t) I(t) \exp\big(\gamma (R_t - 1)\big),
+\end{align*}
+where in the second line we used the local-linear approximation to log-infecteds
+curve from \eqref{eq:inf_approx}, as well as a local-constant approximation to
+the susceptible curve (which underlies this local-linear approximation in the
+first place). By the same logic,  
+$$
+\Delta T(t) \approx \beta S(t) I(t),
+$$
+and thus 
+$$
+\frac{\Delta T(t+1)}{\Delta T(t)} \approx \exp\big(\gamma (R_t - 1)\big). 
+$$
+In other words, from the ratio $\Delta T(t+1) / \Delta T(t)$, we can estimate
+$R_t$, provided that we already know (or can estimate) $\gamma$. This
+establishes the claim in \eqref{eq:log_change_ratio} by taking logs of each
+side, and noting that if $N_t$ is the number of new infections at each $t$, then
+$N_{t+1} / N_t = \Delta T(t+1) / \Delta T(t)$ (because the total number of
+individuals in the population cancels in the ratio).
+\end{appendix}
+
+\bibliographystyle{imsart-nameyear}
+\bibliography{ryantibs, nowcast}      
+\end{document}
+
+
