@@ -235,11 +235,11 @@ more accurate and timely data than federal health authorities (probably due to
 unrecoverable failures at one or more points along the reporting pipeline). In
 fact, not only in the early days of the pandemic, but throughout, the data
 published by these groups has been invaluable for decision-makers, modelers,
-data journalists, and the general public; for example, in the U.S.\ COVID-19
-Forecast Hub \citep{ForecastHub}, an open, community-driven repository of
-forecasts that serves as the official source for forecasting communications by
-the U.S.\ CDC, data from JHU CSSE remains the gold standard for COVID-19 case
-and death forecast evaluation.
+journalists, and the general public; for example, data from JHU CSSE remains the
+gold standard for COVID-19 case and death forecast evaluation in the COVID-19
+Forecast Hub \citep{ForecastHub}, a community-driven repository of forecasts
+that serves as the official source for forecasting communications by the U.S.\
+CDC.
 
 Turning our focus now to case reporting, JHU scrapes cumulative case numbers
 that are published daily on local health authority dashboards, and subsequently
@@ -276,16 +276,15 @@ Figure~\ref{fig:line_list_state}).
 \subsection{Nowcasting by Deconvolution}
 
 In what follows in this paper, we use the CDC line list to estimate a delay
-distribution between symptom onset and report dates, and then use this delay  
-distribution to deconvolve daily numbers of new case reports published by JHU to
-estimate daily numbers of new symptomatic infections. Furthermore, we train
+distribution between symptom onset and report dates, and then use this delay
+distribution to deconvolve daily numbers of new case reports published by JHU
+CSSE to estimate daily numbers of new symptomatic infections. Moreover, we train
 models that track historical trends between past infection estimates and
-auxiliary signals---based on COVID-related outpatient visits, self-reported
-symptoms from online surveys, and Google searches related to COVID
-symptoms---and fuse together predictions from these models to improve
-the accuracy and robustness of our estimates of new infections for the most
-recent 10 days (where deconvolution is particularly challenging). An
-illustration is given in Figure~\ref{fig:deconv_demo}. 
+auxiliary signals of COVID-19 activity from Delphi's COVIDcast project
+\citep{Reinhart:2021}, and we fuse together predictions from these models in
+order to improve the accuracy and robustness of our estimates of new infections
+for the most recent 10 days (where deconvolution is particularly
+challenging). An illustration is given in Figure~\ref{fig:deconv_demo}.
 
 \begin{figure*}[tb]
 \centering
@@ -330,7 +329,11 @@ Section~\ref{sec:leverage_aux}, and extensive evaluations---comparing nowcasts
 made in real-time to those made retrospectively (using ``finalized'' data that
 would have only been available much later), are performed in
 Section~\ref{sec:evaluation}. In Section~\ref{sec:discussion}, we conclude with
-a discussion and describe a few directions for future work.
+a discussion and describe a few directions for future work. 
+
+R and Python code
+for reproducing all figures and results in this paper can be found at
+\url{https://github.com/cmu-delphi/stat-sci-nowcast}. 
 
 \subsection{Related Work}
 \label{sec:related_work}
@@ -349,17 +352,22 @@ available in provisional form in real-time.
 
 The latent setting exhibits another degree of diversity within itself. In our
 work, we target symptomatic COVID-19 infections, which, to be perfectly clear,
-is a latent data stream. Another example along similar lines is
+is a latent time series. Another example along similar lines is
 \citet{Goldstein:2009}, who estimate influenza infection incidence via Bayesian
 deconvolution of mortality data. Meanwhile, other authors might view inferring 
 latent infections as just a stepping stone toward ultimately estimating the 
-effective reproductive number $R_t$, a key epidemic parameter. Central
-contributions to the methodology on $R_t$ nowcasting include:
-\citet{Wallinga:2004}, who develop a simple model that uses case counts and an 
-estimate of the serial interval; \citet{Bettencourt:2008}, who derive a local
-approximation to the SIR model; and \citet{Cori:2013, Thompson:2019}, who build 
-on the renewal equation using Bayesian modeling. For a nice review of these
-approaches, see \citet{Gostic:2020}. 
+instantaneous reproductive number $R_t$, a key epidemic parameter. Important 
+contributions to the methodology on real-time estimation of $R_t$ include: 
+%\citet{Wallinga:2004}, who propose a forward-looking approach (in fact, to
+%estimate a related but slightly different quantity known as the case
+%reproduction number) based on an estimate of the serial interval;
+\citet{Bettencourt:2008}, who use a local approximation to the SIR model, and 
+\citet{Cori:2013, Thompson:2019}, who use a discretization of the renewal
+equation within a Bayesian framework. For a thorough review and comparison of
+these methods, see \citet{Gostic:2020}. The latter paper also discusses in some
+detail the importance of properly modeling the delay between infection onset and
+case report, and the issue of right truncation, which, as we will see, are
+central issues in our paper as well. 
 
 The aforementioned methods have been applied and extended to build systems for
 real-time $R_t$ nowcasting during the COVID-19 pandemic by \citet{Abbott:2020,
@@ -369,24 +377,24 @@ convolve forward a candidate estimate of infections, obtain feedback by
 comparing the result to measured cases, and iterate to refine estimates. This
 can be effective given accurate prior knowledge, but of course it can be hard to
 judge the accuracy of prior knowledge in practice. We take a more flexible,
-non-model-based approach and estimate infections by direct deconvolution. We
-also focus on fusing in auxiliary sources of information to improve real-time
-accuracy and robustness. We remark that nowcasts of $R_t$ could be inferred as a
-by-product of our infection nowcasts (based on a local approximation to the SIR
-model), which we describe in the discussion.
+non-model-based approach and estimate infections via direct deconvolution. We
+also focus on fusing in auxiliary sources of information in order to improve
+real-time accuracy and robustness. We remark that, if estimates of $R_t$ were
+desired, then these could certainly be inferred as a by-product of our infection
+nowcasts.
 
 Finally, deconvolution has been extensively studied for many years in many
 fields, notably signal and image processing, where deconvolution is sometimes
-called deblurring. As an inverse problem, deconvolution is ill-posed in
-settings in which the convolution operator is not known exactly or observations are
-made with noise \citep{Oppenheim:2017}. Longstanding approaches to overcome
-mis-specification here traditionally involve regularization, 
-classically, Wiener deconvolution \citep{Wiener:1964}, which stabilizes the
-inversion using an estimated signal-to-noise ratio. Alternative approaches use
-familiar regularization techniques like $\ell_1$ and $\ell_2$ penalities
-\citep{Taylor:1979, Debeye:1990}. Most related to our work is deconvolution
-using total variation regularization, first proposed by \citet{Rudin:1994},
-which has since become a central tool in signal and image processing. 
+called deblurring. As an inverse problem, deconvolution is ill-posed in settings
+in which the convolution operator is not known exactly or observations are made
+with noise \citep{Oppenheim:2017}. Approaches to overcome this traditionally
+involve regularization, as in the classical Wiener deconvolution
+\citep{Wiener:1964}, which stabilizes the inversion using an estimated
+signal-to-noise ratio. Alternative approaches employ familiar regularization
+techniques such as $\ell_1$ and $\ell_2$ penalities \citep{Taylor:1979,
+  Debeye:1990}. Most related to our paper is deconvolution using total variation 
+regularization, first proposed by \citet{Rudin:1994}, and now a central tool in
+signal and image processing.
 
 \section{Preliminaries}
 \label{sec:preliminaries}
@@ -433,14 +441,14 @@ COVID-like illness by CLI.
 \end{enumerate}
 
 Roughly speaking, we study these particular indicators (ordered roughly from
-``late'' to  ``early'') because conceptually they reflect data measurements
-that would be made at some period of time in between infection onset and case
-report to a public health authority, and therefore would be relevant in
-inferring latent infection rates. More information on these indicators and
-their underlying data sources is given in \citet{Reinhart:2021}. For more
-information on CTIS in particular, we refer to \citet{Salomon:2021}. For a
-study of how these and similar indicators can contribute to COVID-19 forecasting
-models, we refer to \citet{McDonald:2021}. 
+``late'' to ``early'') because conceptually they reflect data measurements that
+would be made at some period of time in between infection onset and case report
+to a public health authority, and therefore would be relevant in inferring
+latent infection rates. More information on these indicators and their
+underlying data sources is given in \citet{Reinhart:2021}. For more information
+on CTIS in particular, see \citet{Salomon:2021}; and for a study of how these
+and similar indicators can improve COVID-19 forecasting, see
+\citet{McDonald:2021}.
 
 \smallskip
 \paragraph*{Sensor Fusion.}  
@@ -455,15 +463,15 @@ trained on historical estimated infection rates. We will refer these six
 contemporaneous estimates as \emph{sensors}.
 
 In this paper, we consider (as described in Section~\ref{sec:sensor_fusion})
-various methods for combining these estimates into single estimate of the 
+various methods for combining these estimates into a single estimate of the  
 infection rate, which we will call \emph{sensor fusion} methods. Broadly
-speaking, sensor fusion is a form of ensembling, which is used extensively 
-in predictive modeling in statistics and machine learning, as it can often help
+speaking, sensor fusion is a form of ensembling, which is ubiquitous in in
+predictive modeling in statistics and machine learning, as it can often help
 improve both accuracy and robustness. In our particular application, the sensors
-themselves are constructed from data streams operating outside of traditional 
-public health reporting, which itself contributes an important angle in terms of
-robustness in the estimation of latent infection rates (as these are tied to  
-public health reports via a convolutional model). 
+themselves are constructed from data streams operating outside of traditional
+public health reporting, which itself contributes an additional important angle
+in terms of robustness. % in the estimation of latent infection rates (as these 
+% are tied to  public health reports via a convolutional model).  
 
 \subsection{Problem Setup}
 \label{sec:problem_setup}
@@ -481,42 +489,36 @@ of 10 targets per nowcast date $t$.
 
 When we say above that nowcasts are made using data that would have been
 available \emph{as of} a given nowcast date $t$, we mean that we adhere not to
-only the real-time availability (latency) of signals at $t$, but also the 
+only the real-time availability (latency) of signals at $t$, but also the
 \emph{version} of the data published at $t$---simply put, imagine that we
 ``rewind'' the clock to time $t$ and query the API to receive the data that
 would have been returned then. This is possible becausse the COVIDcast API
-records and provides access to all historical versions of data, as described in 
+records and provides access to all historical versions of data, as described in
 \citet{Reinhart:2021}. As epidemic data is often subject to revision, if we
 train and evaluate models on ``finalized'' data (that would have been available
-only at a much later time point) then this can lead to overly optimistic
-(inaccurate) conclusions about real-time model performance; see, e.g.,
-\citet{McDonald:2021}. 
+only at a much later time point) then this can lead to inaccurate conclusions
+about real-time model performance; see, e.g., \citet{McDonald:2021}.
 
 Further, it is worth noting that reported case data from JHU is available at a
 1-day lag, and we assume that there is at least another 1-day lag between
 symptom onset and case report (explained in
 Section~\ref{sec:delay_distribution}). Hence through real-time deconvolution
 alone we would be able to make nowcasts at a 2-day lag at the earliest. Making
-nowcasts at a 1-day lag is enabled by sensor fusion, using auxiliary signals
+nowcasts at a 1-day lag is possible with sensor fusion, using auxiliary signals 
 with 1-day latency (explained in Section~\ref{sec:leverage_aux}). In this sense,
-sensor fusion is able improve not only nowcasting accuracy, but also latency,
-and buys us 1 extra day.
+sensor fusion is able to improve not only accuracy, but also latency, and buys
+us 1 extra day. 
 
 \smallskip
 \paragraph*{Geographic Scope.}
 
 We produce nowcasts at the county resolution, but for computational purposes, we
-restrict our attention to the the 200 U.S.\ counties with the highest population
-(according to the 2019 Census). We additionally produce estimates for each 
-of
-the 50 U.S.\ states.
-
-Some of the methodology that we use for sensor fusion---in particular, the
-Kalman-filter-inspired method in \citet{Farrow:2016}---requires a
-geographical hierarchy, thus using the remaining $\approx$ 2500 U.S.\ counties
-we aggregate these within each state to create ``rest-of-state'' jurisdictions,  
-and make estimates for these as well, for the purposes or maintaining such a
-hierachy. 
+restrict our attention to the 200 U.S.\ counties with the highest
+population. We additionally produce estimates for each of the 50 U.S.\ states. 
+(Some of the methodology that we use for sensor fusion requires a geographical
+hierarchy, thus using the remaining $\approx$ 3000 U.S.\ counties we aggregate
+these within each state to create ``rest-of-state'' jurisdictions, and make
+estimates for these as well, for the purposes or maintaining such a hierachy.) 
 
 \smallskip
 \paragraph*{Evaluation.}
@@ -570,11 +572,9 @@ discussion.
 
 Lastly, under an assumption that the confounding acts as a multiplicative bias
 that changes slowly over time, our real-time infection rate
-estimates---themselves subject to confounding by construction, as explained
-above---can be post-processed to derive real-time \emph{approximately
-unconfounded} estimates of $R_t$, which is the average of number of secondary
-infections generated by a COVID-19 infection at time $t$. This is also described
-in the discussion. 
+estimates---themselves subject to confounding, as explained above---can be
+post-processed to derive real-time \emph{approximately unconfounded} estimates
+of $R_t$. This is also described in the discussion.
 
 \section{Retrospective Deconvolution}
 \label{sec:deconv_retro}
@@ -654,14 +654,15 @@ code for missingness.
 
 Assumption~\ref{asm:geo_invar} is the most noteworthy and troublesome. We do
 \emph{not} believe it to be true that different locations actually have
-identical patterns of delay between infections and case reports; conversely, we 
+identical patterns of delay between infections and case reports; conversely, we
 expect there to be a considerable amount of variability between locations in
 this regard. While we do allow the delay distribution to change over time (see
-Figure~\ref{fig:line_list_time} for evidence for the importance of this), we 
+Figure~\ref{fig:line_list_time} for evidence for the importance of this), we
 consider Assumption~\ref{asm:geo_invar} to be a weakness of our work. However,
-the \emph{data is simply not there} in the CDC line list to warrant estimation
-of location-specific delay distributions (see Figure~\ref{fig:line_list_state}), 
-thus we resort to estimating a nation-wide delay distribution.
+the \emph{data is simply not there} in the CDC line list to warrant
+location-specific estimation of the delay distribution (see
+Figure~\ref{fig:line_list_state}), thus we resort to estimating a nation-wide
+delay distribution.
 
 Meanwhile, it is worth pointing out that better (location-specific) estimates of
 the delay distribution could be simply plugged into our deconvolution
@@ -750,8 +751,8 @@ distribution estimates, in what follows.
 The restricted line list is no better with respect to such missingness, 
 exhibiting nearly exactly the same patterns as those described above. It
 does additionally provide geographic details, which allows us to examine how  
-missingness is dispersed across different
-locations. Figure~\ref{fig:line_list_state} displays results to this end, using 
+missingness is dispersed across different locations. 
+Figure~\ref{fig:line_list_state} displays results to this end, using  
 the restricted line list released on October 12, 2021. The top panel shows that
 there is a high degree of missingness in complete case counts (those with
 both onset date and report date observed) in most states, often well over 50\%,
@@ -904,7 +905,7 @@ produce deconvolution estimates \smash{$\hx^{(t)}_{\ell,s}$} up through $s=t-2$
 \caption{Illustration of right truncation with a delay distribution of length 3
   (which is taken to be stationary for simplicity). At the nowcast time $t$,
   some ``part'' of the latent signal $x_t$ will appear in $y_{t+1},y_{t+2}$;
-  likewise, some ``part'' of $x_{t-1}$ will appear $y_{t+1}$.}   
+  likewise, some ``part'' of $x_{t-1}$ will appear in $y_{t+1}$.}   
 \label{fig:right_truncation}
 \end{figure}
 
@@ -971,8 +972,10 @@ boundary only, gives:
 \includegraphics[width=.315\linewidth]{./figures/ny_ntf.pdf}
 \includegraphics[width=.315\linewidth]{./figures/ny_tapered_ntf.pdf}
 \caption{Comparison of boundary behavior for real-time deconvolution in New 
-  York, displayed for a sample of nowcast dates. The black dashed line indicates 
-  finalized infections, estimated roughly three months after June 1, 2021.}
+  York, displayed for a sample of different nowcast dates (where each colored
+  curve traces out the deconvolution estimates for a different nowcast
+  date). The black dashed line indicates finalized infections, estimated roughly
+  three months after June 1, 2021.}  
 \label{fig:boundary_comparison}
 \end{figure*}
 
@@ -1043,10 +1046,11 @@ this penalty can provide in nowcasting.
 \begin{figure}[tb]
 \centering
 \includegraphics[width=0.825\linewidth]{./figures/tapered_smoothing_03_small_square.pdf}
-\caption{Comparing regularization approaches by MAE for nowcasting. Each
-  additional regularization method gives a huge improvement on trend filtering,
-  and the biggest improvement is from using natural trend filtering constraints
-  and a tapered smoothing penalty combined.}      
+\caption{Comparing regularization approaches by MAE for nowcasting (the shaded
+  bands here and henceforth, in all MAE figures, correspond to 95\% bootstrap
+  confidence intervals.) Both approaches for additional regularization give a
+  huge improvement on trend filtering. The biggest improvement comes from
+  combining the two approaches.}
 	\label{fig:extra_reg}
 \end{figure}
 
@@ -1639,41 +1643,44 @@ investigating here, to aid visual consumption.
 \smallskip
 \paragraph*{$R_t$ Estimation.} 
 
-The effective reproductive number $R_t$, the average number of secondary
-infections generated from a single primary infection at time $t$, is a useful
-and interpretable parameter that reflects the dynamics of epidemic growth in a  
-population. In the standard SIR model, the effective reproduction number at 
-time $t$ can be approximated using the number of new infections at $t$  
-and $t+1$, denoted by $N_t$ and $N_{t+1}$, via the relationship: 
-\begin{equation}
-\label{eq:log_change_ratio}
-\log \frac{N_{t+1}}{N_t} \approx \gamma (R_t - 1)  
-\end{equation}
-where $\gamma$ denotes the recovery rate in the SIR model. This approximation 
-is based on a simple Taylor series argument, and is used by
-\citet{Bettencourt:2008} and other authors, though for completeness we give
-a derivation for \eqref{eq:log_change_ratio} in
-Appendix~\ref{app:log_change_ratio}.
-
-Though the log-change-ratio approximation \eqref{eq:log_change_ratio} for $R_t$
-is well-known in the literature on mathematical modeling of epidemics, its use
-in the presence of confounding seems to be underexplored and potentially
-undervalued. For simplicity, we will explain the idea in the context of a single
-location. Suppose, as before, that a fraction $a_t$ of infections go untested at
-time $t$. Then we have $N_t = b_t x_t$, where $x_t$ is the number of new
-infections at time $t$ that show up in case reports (the focus of this paper)
-and $b_t = 1/(1-a_t)$. Moreover, from \eqref{eq:log_change_ratio}, we have
-$$
-R_t \approx 1 + \frac{1}{\gamma} \log \frac{b_{t+1} x_{t+1}}{b_t x_t}  
-\approx 1 + \frac{1}{\gamma} \log \frac{x_{t+1}}{x_t},
-$$
+The instantaneous reproductive number $R_t$, the average number of secondary
+infections at time $t$ generated from a primary infection in the past, is a
+useful and interpretable parameter that reflects the dynamics of epidemic growth
+in a population. In the SIR model, the instantaneous reproduction number $R_t$
+and growth rate $r_t$ at time $t$ obey the following relationship:
+\[
+R_t \approx 1 + \frac{r_t}{\gamma}, 
+\] 
+where $\gamma$ denotes the recovery rate in the SIR model. While this is
+well-known in the literature on mathematical modeling of epidemics (and is exact
+under local exponential growth; see, e.g., \citet{Wallinga:2007}), its use in
+the presence of confounding seems to be underexplored and potentially
+undervalued. If $I_t$ denotes the number of new infections at $t$, then using a
+simple discrete difference approximation to $r_t$ leads to: 
+\[
+R_t \approx 1 + \frac{1}{\gamma}\bigg( \frac{I_{t+1}}{I_t} - 1 \bigg). 
+\]
+A similar though not identical approximation is given in
+\citet{Bettencourt:2008}, where $I_{t+1}/I_t-1$ is replaced by
+$\log(I_{t+1}/I_t)$. Critically, incident infections only enter right-hand side
+above as a \emph{ratio} of values adjacent in time, and thus if we are only able
+to estimate this up to an unknown multiplicative factor (due to confounding),
+then this factor approximately cancels in the ratio as long as it is slowly
+varying in time. In slightly more detail (and for simplicity, considering just a
+single location), suppose as before that a fraction $a_t$ of infections go
+untested at time $t$. Then $I_t = b_t x_t$ where $x_t$ is the number of new
+infections at time $t$ that show up in case reports (i.e., the focus of this
+paper) and $b_t = 1/(1-a_t)$. From the previous display,   
+\[
+R_t \approx 1 + \frac{1}{\gamma}\bigg( \frac{b_{t+1} x_{t+1}}{b_t x_t} - 1
+\bigg) \approx 1 + \frac{1}{\gamma}\bigg( \frac{x_{t+1}}{x_t} - 1 \bigg),
+\]
 where the last approximation is motivated by an additional assumption the 
-untested fraction varies slowly over time (so that $b_{t+1}/b_t \approx
-1$). The last display shows that estimates of $x_t$ (as we produce in this
-paper), even though $x_t$ is itself confounded due to a lack of universal
-testing, can produce \emph{approximately unconfounded} estimates of $R_t$. This
-is true both in the retrospective and real-time sense, and will be the topic of
-future study.   
+untested fraction varies slowly over time (so $b_{t+1}/b_t \approx
+1$). This shows that estimates of $x_t$ can produce \emph{approximately
+  unconfounded} estimates of $R_t$, even though $x_t$ is itself confounded
+due to a lack of universal testing. This is true both in the retrospective and 
+real-time sense, and will be the topic of future study.     
 
 % In other words, estimating $R_t$ may be more tractable than estimating $N_t$, 
 % since an assumption of slow-varying bias $b_t$ means that the confounding 
@@ -1850,66 +1857,66 @@ the inclusion of claims-based sensors.
 \label{fig:rank_ensemble_claims}
 \end{figure}
 
-\section{Log-Change-Ratio Approximation for $R_t$} 
-\label{app:log_change_ratio}
+% \section{Log-Change-Ratio Approximation for $R_t$} 
+% \label{app:log_change_ratio}
 
-We consider the standard susceptible-infected-recovered (SIR) model
-\citep{Kermack:1927} with transmission rate $\beta$ and recovery rate
-$\gamma$. Let $S(t),I(t),R(t)$ denote the fraction of susceptible, infected,
-recovered individuals, respectively, at time $t$, in some underlying
-population. Then the SIR model evolves according to the continuous-time dynamics
-(subject to some initial conditions):
-\begin{align*}
-S'(t) &= -\beta S(t) I(t) \\
-I'(t) &= \beta S(t) I(t) - \gamma I(t) \\
-R'(t) &= \gamma I(t).
-\end{align*} 
+% We consider the standard susceptible-infected-recovered (SIR) model
+% \citep{Kermack:1927} with transmission rate $\beta$ and recovery rate
+% $\gamma$. Let $S(t),I(t),R(t)$ denote the fraction of susceptible, infected,
+% recovered individuals, respectively, at time $t$, in some underlying
+% population. Then the SIR model evolves according to the continuous-time dynamics
+% (subject to some initial conditions):
+% \begin{align*}
+% S'(t) &= -\beta S(t) I(t) \\
+% I'(t) &= \beta S(t) I(t) - \gamma I(t) \\
+% R'(t) &= \gamma I(t).
+% \end{align*} 
 
-The effective reproduction number in this model is defined as $R_t = S(t) \beta
-/ \gamma$. We can interpret the $R_t$ as being determined by
-the slope of a natural first-order approximation to the curve $\log I(t)$ at
-time $t$. That is, looking back at the differential equation for $I(t)$, if we
-forget about the fact that $S(t)$ actually depends on $t$, this ``looks like'' 
-$I'(t)$ is a ``constant'' times $I(t)$ (that ``constant'' being $\beta S(t) -
-\gamma$), which suggests that for $t$ near a point $t_0$,   
-\begin{align}
-\nonumber
-I(t) &\approx I(t_0) \exp\big( (\beta S(t) - \gamma) (t-t_0) \big) \\ 
-\label{eq:inf_approx}
-&= I(t_0) \exp\big(\gamma (R_t - 1) (t-t_0)\big).
-\end{align}
+% The instantaneous reproduction number in this model is defined as $R_t = 
+% S(t) \beta / \gamma$. We can interpret the $R_t$ as being determined by 
+% the slope of a natural first-order approximation to the curve $\log I(t)$ at
+% time $t$. That is, looking back at the differential equation for $I(t)$, if we
+% forget about the fact that $S(t)$ actually depends on $t$, this ``looks like'' 
+% $I'(t)$ is a ``constant'' times $I(t)$ (that ``constant'' being $\beta S(t) -
+% \gamma$), which suggests that for $t$ near a point $t_0$,   
+% \begin{align}
+% \nonumber
+% I(t) &\approx I(t_0) \exp\big( (\beta S(t) - \gamma) (t-t_0) \big) \\ 
+% \label{eq:inf_approx}
+% &= I(t_0) \exp\big(\gamma (R_t - 1) (t-t_0)\big).
+% \end{align}
 
-Now let $T(t)$ denote the total fraction of individuals who have ever been
-infected at time $t$ (note, $T(t) = 1-S(t)$). Then this evolves according to the 
-dynamics: 
-$$
-T'(t) = \beta S(t) I(t).
-$$
-Consider the change in total infecteds from time $t$ to $t+1$, also called the
-\emph{incidence proportion} over this period, denoted $\Delta T(t+1) = T(t+1) - 
-T(t)$. Using this as a discrete approximation to the derivative (backward
-difference) of the total infecteds curve, 
-\begin{align*}
-\Delta T(t+1) &\approx \beta S(t+1) I(t+1) \\
-&\approx \beta S(t) I(t) \exp\big(\gamma (R_t - 1)\big),
-\end{align*}
-where in the second line we used the local-linear approximation to log-infecteds
-curve from \eqref{eq:inf_approx}, as well as a local-constant approximation to
-the susceptible curve (which underlies this local-linear approximation in the
-first place). By the same logic,  
-$$
-\Delta T(t) \approx \beta S(t) I(t),
-$$
-and thus 
-$$
-\frac{\Delta T(t+1)}{\Delta T(t)} \approx \exp\big(\gamma (R_t - 1)\big). 
-$$
-In other words, from the ratio $\Delta T(t+1) / \Delta T(t)$, we can estimate
-$R_t$, provided that we already know (or can estimate) $\gamma$. This
-establishes the claim in \eqref{eq:log_change_ratio} by taking logs of each
-side, and noting that if $N_t$ is the number of new infections at each $t$, then
-$N_{t+1} / N_t = \Delta T(t+1) / \Delta T(t)$ (because the total number of
-individuals in the population cancels in the ratio).
+% Now let $T(t)$ denote the total fraction of individuals who have ever been
+% infected at time $t$ (note, $T(t) = 1-S(t)$). Then this evolves according to the 
+% dynamics: 
+% $$
+% T'(t) = \beta S(t) I(t).
+% $$
+% Consider the change in total infecteds from time $t$ to $t+1$, also called the
+% \emph{incidence proportion} over this period, denoted $\Delta T(t+1) = T(t+1) - 
+% T(t)$. Using this as a discrete approximation to the derivative (backward
+% difference) of the total infecteds curve, 
+% \begin{align*}
+% \Delta T(t+1) &\approx \beta S(t+1) I(t+1) \\
+% &\approx \beta S(t) I(t) \exp\big(\gamma (R_t - 1)\big),
+% \end{align*}
+% where in the second line we used the local-linear approximation to log-infecteds
+% curve from \eqref{eq:inf_approx}, as well as a local-constant approximation to
+% the susceptible curve (which underlies this local-linear approximation in the
+% first place). By the same logic,  
+% $$
+% \Delta T(t) \approx \beta S(t) I(t),
+% $$
+% and thus 
+% $$
+% \frac{\Delta T(t+1)}{\Delta T(t)} \approx \exp\big(\gamma (R_t - 1)\big). 
+% $$
+% In other words, from the ratio $\Delta T(t+1) / \Delta T(t)$, we can estimate
+% $R_t$, provided that we already know (or can estimate) $\gamma$. This
+% establishes the claim in \eqref{eq:log_change_ratio} by taking logs of each
+% side, and noting that if $N_t$ is the number of new infections at each $t$, then
+% $N_{t+1} / N_t = \Delta T(t+1) / \Delta T(t)$ (because the total number of
+% individuals in the population cancels in the ratio).
 \end{appendix}
 
 \bibliographystyle{imsart-nameyear}
