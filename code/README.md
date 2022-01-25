@@ -37,7 +37,9 @@ There are also several miscellaneous scripts:
  affect of additional regularization on the right boundary;
 * `evaluate_fusion_methods.ipynb` which creates the figures analyzing the
  performance of the sensors and sensor fusion methods over the evaluation
-  period.
+  period;
+* the directory `nowcast_demo_figure/` contains python and R files used to
+ generate Figure 1.
 
 Utilities needed to run experiments are also available:
 * `epidata.py` is used to retrieve the data used in the experiments from the
