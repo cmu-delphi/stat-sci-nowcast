@@ -843,13 +843,13 @@ section): our retrospective deconvolution runs from May 1, 2020 to August 28,
 2021, a period we denote by $\T$, and uses case data published on August 30,
 2021. 
 
-For location $\ell$, let $y_{\ell,t}$ denote the number of new cases reported at
-$t$ and the number of new infections that have onset at time $t$, respectively,
-per 100,000 people. Note that $y_{\ell,t},x_{\ell,t}$ obey the
-model~\eqref{eq:conv_model2}, \eqref{eq:delay_prob2}, as we have just rescaled
-the underlying counts here by a constant (to put them on the scale of rates),
-and recall, we assume all locations have the same delay distribution
-(Assumption~\ref{asm:geo_invar}).
+For location $\ell$, denote by $y_{\ell,t}$ and $x_{\ell,t}$ the number of new
+cases reported and number of new infections that onset at time $t$,
+respectively, per 100,000 people. Note that $y_{\ell,t},x_{\ell,t}$ obey
+\eqref{eq:conv_model2}, \eqref{eq:delay_prob2}, because we have just rescaled
+the underlying counts here by a constant (in order to put them on the scale of
+rates), and recall, we assume that all locations have the same delay
+distribution (Assumption~\ref{asm:geo_invar}).
 
 Given the delay distribution estimates from
 Algorithm~\ref{alg:delay_dist_retro}, \smash{$\hp_t = (\hp_t(1), \ldots, 
