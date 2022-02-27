@@ -136,8 +136,8 @@
 %% Enter the title of your article here     %%
 %%                                          %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\title{Real-Time Estimation of COVID-19 Infections via Deconvolution and Sensor
-  Fusion} 
+\title{Real-Time Estimation of COVID-19 Infections: Deconvolution and Sensor
+  Fusion}  
 \runtitle{Real-Time Estimation of COVID-19 Infections}
 
 \begin{aug}
@@ -246,17 +246,21 @@ that are published daily on local health authority dashboards, and subsequently
 derives a notion of case incidence based on day-to-day differences in cumulative
 counts. Note that, by construction, this definition of incidence reflects the
 number of new COVID-19 cases that are \emph{reported} (to the public) on any
-given day. Of course, this is not the same as the number of new cases 
-by date tested, specimen collection date, or symptom onset date. Any of the
-latter options would be more informative (increasingly so) as a definition of 
-incidence; but the reality is that aligning by report date is the only
-immediately available option, given the data that is published broadly on local
-health authority dashboards, and hence collected and aggregated by data
-scrapers. JHU publishes the number of new COVID-19 case reports per U.S.\
-county, daily, at a 1-day lag. However, since report dates can lag behind
-symptom onset dates by many days (a typical lag is around 5-10, but lags can be
-up to 30 days or more; see Figure~\ref{fig:line_list_time}), this really gives
-us a glimpse into COVID activity in the recent past, rather than the present.
+given day. Of course, this is not the same as the number of new cases by date
+tested, specimen collection date, or symptom onset date. Any of the latter
+options would be more informative (increasingly so) as a definition of
+incidence; revamping our surveillance systems so that they can directly provide
+these and other aggregates of interest to the public health response is a
+critical task for future public health crises.
+
+ The reality of the current pandemic: alignment by report date is the only
+option available, given the data published broadly on local health authority
+dashboards, hence collected and aggregated by data scrapers. JHU publishes the
+number of new COVID-19 case reports per U.S.\ county, daily, at a 1-day
+lag. However, since report dates can lag behind symptom onset dates by many days
+(a typical lag is around 5-10, but lags can be up to 30 days or more; see
+Figure~\ref{fig:line_list_time}), this is actually giving us a glimpse into
+COVID activity in the recent past, rather than the present.
 
 Importantly, the CDC publishes a de-identified patient-level data set (``line
 list'') on COVID-19 infections \citep{cdc_public}, which provides a symptom 
@@ -342,13 +346,11 @@ In the computational epidemiology literature, the term ``nowcasting'' has been
 applied to a variety of related but distinct estimation problems. Broadly
 speaking, what these problems have in common is that they are about real-time
 estimation of some quantity, based on partial or noisy data. They differ in
-\emph{what} is being estimated, and whether this quantity will
-eventually be fully observed (after enough time has passed) or whether it is 
-latent. Examples in the former non-latent setting include \citet{Yang:2015,
-  Farrow:2016, Jahja:2019, Brooks:2020, McGough:2020, Hawryluk:2021}. The
-nowcast targets here are influenza-like illness cases, dengue cases, or
-COVID-19 deaths, which, due to reporting delays and data revisions, are only 
-available in provisional form in real-time. 
+\emph{what} is being estimated, and whether this quantity will eventually be
+fully observed (after enough time has passed) or whether it is latent. Examples
+in the former non-latent setting, which span applications in influenza, dengue,
+and COVID-19, include \citet{Yang:2015, Farrow:2016, Jahja:2019, Brooks:2020,
+  McGough:2020, Hawryluk:2021}. 
 
 The latent setting exhibits another degree of diversity within itself. In our
 work, we target symptomatic COVID-19 infections, which, to be perfectly clear,
@@ -376,9 +378,10 @@ that they infer infections through forward-filling: loosely speaking, they
 convolve forward a candidate estimate of infections, obtain feedback by
 comparing the result to measured cases, and iterate to refine estimates. This
 can be effective given accurate prior knowledge, but of course it can be hard to
-judge the accuracy of prior knowledge in practice. We take a more flexible,
-non-model-based approach and estimate infections via direct deconvolution. We
-also focus on fusing in auxiliary sources of information in order to improve
+judge the accuracy of prior knowledge in practice. We take a more flexible
+approach and estimate infections via direct deconvolution. Our approach is
+nonparametric, but is still fairly simple and computationally efficient. We also
+focus on fusing in auxiliary sources of information in order to improve
 real-time accuracy and robustness. We remark that, if estimates of $R_t$ were
 desired, then these could certainly be inferred as a by-product of our infection
 nowcasts.
@@ -806,8 +809,8 @@ result \smash{$\hp_t(1), \ldots, \hp_t(d)$}, and return these probabilities.
 
 \begin{figure}[tb]
 \centering
-\includegraphics[width=0.825\linewidth]{./figures/finalized_delay_quantiles.pdf}
-\includegraphics[width=0.825\linewidth]{./figures/overlay_finalized_delay_dist.pdf}
+\includegraphics[width=0.9\linewidth]{./figures/finalized_delay_quantiles.pdf}
+\includegraphics[width=0.9\linewidth]{./figures/overlay_finalized_delay_dist.pdf}
 \caption{Top: quantiles of the estimated delay distribution returned by 
   Algorithm~\ref{alg:delay_dist_retro} at the levels 50\%, 75\%, and 95\%, as 
   $t$ varies from June 1, 2020 to June 1, 2021. Bottom: estimated delay
@@ -1045,7 +1048,7 @@ this penalty can provide in nowcasting.
 
 \begin{figure}[tb]
 \centering
-\includegraphics[width=0.825\linewidth]{./figures/tapered_smoothing_03_small_square.pdf}
+\includegraphics[width=0.85\linewidth]{./figures/tapered_smoothing_03_small_square.pdf}
 \caption{Comparing regularization approaches by MAE for nowcasting (the shaded
   bands here and henceforth, in all MAE figures, correspond to 95\% bootstrap
   confidence intervals.) Both approaches for additional regularization give a
@@ -1208,8 +1211,8 @@ result \smash{$\hp_t(1), \ldots, \hp_t(d)$}, and return these probabilities.
 
 \begin{figure}[tb]
 \centering
-\includegraphics[width=0.825\linewidth]{./figures/range_overlay.pdf}
-\includegraphics[width=0.825\linewidth]{./figures/l1_summary.pdf}
+\includegraphics[width=0.85\linewidth]{./figures/range_overlay.pdf}
+\includegraphics[width=0.85\linewidth]{./figures/l1_summary.pdf}
 \caption{Top: estimated delay distributions overlaid for all nowcast dates in
   the month of November 2020, when $s=t-1$ (working onset date one day 
   before the nowcast date). Bottom: mean $\ell_1$ distance to finalized
@@ -1250,7 +1253,7 @@ very much for $s$ close to $t$.
 
 \begin{figure}[tb]
 \centering
-\includegraphics[width=0.825\linewidth]{./figures/deconvolution_window_05_small_square.pdf}
+\includegraphics[width=0.85\linewidth]{./figures/deconvolution_window_05_small_square.pdf}
 \caption{Comparing window lengths used in regularized deconvolution by
   MAE for nowcasting. The performance is very similar throughout.}
 \label{fig:deconvolution_window}
@@ -1360,7 +1363,7 @@ same training window). Henceforth we abbreviate it AR(3).
 
 \begin{figure*}[tb]
 \centering
-\includegraphics[width=0.9\linewidth]{./figures/availability.pdf}
+\includegraphics[width=0.95\linewidth]{./figures/availability.pdf}
 \caption{Proportion of observed (non-missing) values over the evaluation 
   period from October 1, 2020 to June 1, 2021, and over all locations, as a 
   function of lag $k=1,\ldots,10$. (NTF refers to the real-time deconvolution
@@ -1503,8 +1506,8 @@ order to estimate infections more than a week into the past.
 
 \begin{figure}[tb]
 \centering 
-\includegraphics[width=0.825\linewidth]{./figures/lineplot_no_claims_no_google_aa.pdf} 
-\includegraphics[width=0.825\linewidth]{./figures/lineplot_claims_no_google_aa.pdf}
+\includegraphics[width=0.85\linewidth]{./figures/lineplot_no_claims_no_google_aa.pdf} 
+\includegraphics[width=0.85\linewidth]{./figures/lineplot_claims_no_google_aa.pdf}
 \caption{Comparing NTF to individual sensor models and the simple average sensor
   fusion method by MAE for nowcasting. The top panel excludes the claims-based
   sensors, whereas the bottom includes them. For lags smaller than 7, all
@@ -1528,8 +1531,8 @@ fusion---a certain kind of robustness, beyond accuracy.
 
 \begin{figure}[tb]
 \centering
-\includegraphics[width=0.95\linewidth]{./figures/rankplot_claims_no_google_aa.pdf}
-\includegraphics[width=0.95\linewidth]{./figures/rankplot_no_claims_no_google_aa.pdf}
+\includegraphics[width=0.975\linewidth]{./figures/rankplot_claims_no_google_aa.pdf}
+\includegraphics[width=0.975\linewidth]{./figures/rankplot_no_claims_no_google_aa.pdf}
 \caption{Comparing NTF to individual sensor models and the simple average sensor
   fusion method by relative ranks over common nowcast tasks. The top panel
   excludes all claims-based sensors and considers lags 1--5, whereas the bottom
@@ -1572,7 +1575,7 @@ lastly simple regression (most often the worst).
 
 \begin{figure}[tb]
 \centering
-\includegraphics[width=0.95\linewidth]{./figures/rankplot_fusion_no_claims.pdf}
+\includegraphics[width=0.975\linewidth]{./figures/rankplot_fusion_no_claims.pdf}
 \caption{Comparing sensor fusion methods by relative ranks over common nowcast 
   tasks, and considering only lags 1--5. The simple average and KF-SF methods
   consistently perform in the top half, while simple regression is most often
@@ -1828,16 +1831,16 @@ the inclusion of claims-based sensors.
 
 \begin{figure}[tb]
 \centering
-\includegraphics[width=0.825\linewidth]{./figures/lineplot_claims.pdf}
-\includegraphics[width=0.825\linewidth]{./figures/lineplot_no_claims.pdf}
+\includegraphics[width=0.85\linewidth]{./figures/lineplot_claims.pdf}
+\includegraphics[width=0.85\linewidth]{./figures/lineplot_no_claims.pdf}
 \caption{As in Figure~\ref{fig:mae_all_no_google_aa}, but including Google-AA.}    
 \label{fig:mae_all}
 \end{figure}
 
 \begin{figure}[tb]
 \centering
-\includegraphics[width=0.825\linewidth]{./figures/rankplot_claims.pdf}
-\includegraphics[width=0.825\linewidth]{./figures/rankplot_no_claims.pdf}
+\includegraphics[width=0.975\linewidth]{./figures/rankplot_claims.pdf}
+\includegraphics[width=0.975\linewidth]{./figures/rankplot_no_claims.pdf}
 \caption{As in Figure~\ref{fig:sensor_rank_no_google_aa}, but including Google-AA.}
 \label{fig:sensor_rank}
 \end{figure}
@@ -1851,7 +1854,7 @@ the inclusion of claims-based sensors.
 
 \begin{figure}[tb]
 \centering
-\includegraphics[width=0.95\linewidth]{./figures/rankplot_fusion_claims.pdf}
+\includegraphics[width=0.975\linewidth]{./figures/rankplot_fusion_claims.pdf}
 \caption{As in Figure~\ref{fig:rank_ensemble}, but including claims-based
   signals.} 
 \label{fig:rank_ensemble_claims}
